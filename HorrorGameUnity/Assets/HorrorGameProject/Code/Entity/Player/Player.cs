@@ -6,9 +6,11 @@ public class Player : Entity
     {
         Idle,
         Move,
+        Hide,
         Rest,
         Safe, //Jizo
-
+        Resist,
+        Dead,
     }
 
     private PlayerState m_playerState;
@@ -58,6 +60,8 @@ public class Player : Entity
 
         if (m_playerState == PlayerState.Safe) return;
 
+        if (m_playerState == PlayerState.Hide) return;
+
         if (!m_isRunning)
         {
             
@@ -86,6 +90,12 @@ public class Player : Entity
         if (m_isInteracting)
         {
             m_interactSystem.TryInteract(transform.position, m_interactLayer, this);
+        }
+
+        if(m_playerState == PlayerState.Hide)
+        {
+            //stop stamina
+            return;
         }
 
         if(m_isMapping)
@@ -166,7 +176,7 @@ public class Player : Entity
         m_staminaTime += Time.deltaTime;
     }
 
-    //OutSide Reference
+    //OutSide Reference-----------------------------------------------
     public void OnInteractSafeProcess()
     {
 
@@ -181,5 +191,19 @@ public class Player : Entity
             ChangeState(PlayerState.Idle);
         }
     }
+
+    public void OnInteractHideProcess()
+    {
+        if (m_playerState != PlayerState.Hide)
+        {
+            ChangeState(PlayerState.Hide);
+
+        }
+        else
+        {
+            ChangeState(PlayerState.Idle);
+        }
+    }
+    //------------------------------------------------------------------
 
 }

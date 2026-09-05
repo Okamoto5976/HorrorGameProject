@@ -14,6 +14,8 @@ public class InputInteractSystem
 
         //Debug.Log($"Interact one : {orderedByProximity[0].gameObject.name}  two : {orderedByProximity[1].gameObject.name}");
 
+        if (orderedByProximity.Length < 0) return;
+
         if (orderedByProximity[0].TryGetComponent<IInteractable>(out var interactable))
         {
             interactable.OnInteract(player);
