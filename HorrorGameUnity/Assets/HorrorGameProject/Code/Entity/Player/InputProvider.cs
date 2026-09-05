@@ -22,6 +22,8 @@ public class InputProvider
         m_input.Player.Move.canceled += InputMove;
 
         m_input.Player.Sprint.performed += InputRun;
+        m_input.Player.Sprint.canceled += InputRun;
+
         m_input.Player.Rest.performed += InputRest;
         m_input.Player.Map.performed += InputMap;
         m_input.Player.Interact.performed += InputInteract;
@@ -42,8 +44,16 @@ public class InputProvider
 
     private void InputRun(InputAction.CallbackContext context)
     {
-        //Debug.Log("InputClass Call Run callback");
-        m_isRun = true;
+        if(context.performed)
+        {
+            //Debug.Log("InputClass Call Run callback");
+            m_isRun = true;
+        }
+        else
+        {
+            m_isRun = false;
+        }
+        //Debug.Log(m_isRun);
     }
 
     private void InputRest(InputAction.CallbackContext context)
@@ -76,10 +86,7 @@ public class InputProvider
     {
         get
         {
-            bool result = m_isRun;
-            m_isRun = false;
-
-            return result;
+            return m_isRun;
         }
     }
 

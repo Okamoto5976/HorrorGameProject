@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class InteractSystem
+public class InputInteractSystem
 {
     public void TryInteract(Vector3 position, LayerMask layer, Player player)
     {

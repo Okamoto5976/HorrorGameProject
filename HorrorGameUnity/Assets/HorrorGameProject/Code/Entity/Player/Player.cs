@@ -6,15 +6,15 @@ public class Player : Entity
     {
         Idle,
         Move,
-        Sit,
-        Rest, //Jizo
+        Rest,
+        Safe, //Jizo
 
     }
 
     private PlayerState m_playerState;
 
     //component or class
-    private InteractSystem m_interactSystem;
+    private InputInteractSystem m_interactSystem;
     [SerializeField] private LayerMask m_interactLayer;
 
     //InputProvider related--------
@@ -29,6 +29,8 @@ public class Player : Entity
     //player status
     [SerializeField] private float m_stamina = 100f;
     private float m_staminaTime = 0f;
+
+    public float Stamina { private set { m_stamina = Mathf.Clamp(value, 0f, 100f); } get => m_stamina; }
 
     protected override void Awake()
     {
@@ -54,8 +56,19 @@ public class Player : Entity
         //これ必要？　コピーして　すべての演算を終えてから写す
         m_velocity = m_rb.linearVelocity;
 
+        if (m_playerState == PlayerState.Safe) return;
 
-        OnMove();
+        if (!m_isRunning)
+        {
+            
+
+            OnMove();
+
+        }
+        else
+        {
+            OnRun();
+        }
 
         m_rb.linearVelocity = m_velocity;
     }
@@ -81,9 +94,10 @@ public class Player : Entity
         }
 
         //Now Player State Rest Process
-        if (m_playerState == PlayerState.Rest)
+        if (m_playerState == PlayerState.Safe)
         {
             //player rest in jizo area, so player cann't move
+            RecoverStamina(5f);
 
             return;
         }
@@ -94,7 +108,15 @@ public class Player : Entity
             ChangeState(PlayerState.Move);
 
             //anim "move"
-            ConsumptionStamina(1f);
+            if (!m_isRunning)
+            {
+                ConsumptionStamina(1f);
+
+            }
+            else
+            {
+                ConsumptionStamina(2f);
+            }
 
         }
         else
@@ -121,11 +143,11 @@ public class Player : Entity
     private void ConsumptionStamina(float multiply)
     {
 
-        if(m_staminaTime >= 1f)
+        if(m_staminaTime >= 0.5f)
         {
             m_staminaTime = 0f;
 
-            m_stamina -= 1f * multiply;
+            Stamina -= 1f * multiply;
         }
 
         m_staminaTime += Time.deltaTime;
@@ -134,13 +156,30 @@ public class Player : Entity
 
     private void RecoverStamina(float multiply)
     {
-        if(m_staminaTime >= 1f)
+        if(m_staminaTime >= 0.5f)
         {
             m_staminaTime = 0f;
 
-            m_stamina += 1f * multiply;
+            Stamina += 1f * multiply;
         }
 
         m_staminaTime += Time.deltaTime;
     }
+
+    //OutSide Reference
+    public void OnInteractSafeProcess()
+    {
+
+        //Debug.Log("SafeProcess");
+        if(m_playerState != PlayerState.Safe)
+        {
+            ChangeState(PlayerState.Safe);
+
+        }
+        else
+        {
+            ChangeState(PlayerState.Idle);
+        }
+    }
+
 }

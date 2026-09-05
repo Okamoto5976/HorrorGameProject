@@ -30,5 +30,10 @@ public abstract class Entity : MonoBehaviour
         //m_rb.linearVelocity = m_velocity;
     }
 
+    protected void OnRun()
+    {
+        m_velocity.x = m_moveInput.x * m_speed * 1.5f;
+    }
+
 
 }
