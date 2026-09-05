@@ -28,6 +28,12 @@ public class Player : Entity
     private bool m_isInteracting;
     //----------------------------
 
+    //player flag
+    private bool m_canMove = true;
+
+    private bool m_openMap = false;
+    private GameObject m_map;
+
     //player status
     [SerializeField] private float m_stamina = 100f;
     private float m_staminaTime = 0f;
@@ -53,26 +59,43 @@ public class Player : Entity
         m_input.Disable();
     }
 
+    public void SetMap(GameObject map)
+    {
+        m_map = map;
+    }
+
     private void FixedUpdate()
     {
         //これ必要？　コピーして　すべての演算を終えてから写す
         m_velocity = m_rb.linearVelocity;
 
-        if (m_playerState == PlayerState.Safe) return;
-
-        if (m_playerState == PlayerState.Hide) return;
-
-        if (!m_isRunning)
+        if (m_playerState == PlayerState.Safe || m_playerState == PlayerState.Hide)
         {
-            
+            m_velocity = Vector3.zero;
+            m_rb.linearVelocity = m_velocity;
+            return;
+        }
 
-            OnMove();
+        if(m_canMove)
+        {
+            if (!m_isRunning)
+            {
+                OnMove();
 
+            }
+            else
+            {
+                OnRun();
+
+            }
         }
         else
         {
-            OnRun();
+            m_velocity = Vector3.zero;
+
         }
+
+
 
         m_rb.linearVelocity = m_velocity;
     }
@@ -101,6 +124,18 @@ public class Player : Entity
         if(m_isMapping)
         {
             //open map
+            if(!m_openMap)
+            {
+                m_openMap = true;
+                m_map.SetActive(m_openMap);
+                m_canMove = false;
+            }
+            else
+            {
+                m_openMap = false;
+                m_map.SetActive(m_openMap);
+                m_canMove = true;
+            }
         }
 
         //Now Player State Rest Process
