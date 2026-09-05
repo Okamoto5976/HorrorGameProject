@@ -36,26 +36,31 @@ public class InputProvider
 
     private void InputMove(InputAction.CallbackContext context)
     {
+        //Debug.Log("InputClass Call Move callback");
         m_moveInput = context.ReadValue<Vector2>();
     }
 
     private void InputRun(InputAction.CallbackContext context)
     {
+        //Debug.Log("InputClass Call Run callback");
         m_isRun = true;
     }
 
     private void InputRest(InputAction.CallbackContext context)
     {
+        //Debug.Log("InputClass Call Rest callback");
         m_isRest = true;
     }
 
     private void InputMap(InputAction.CallbackContext context)
     {
+        //Debug.Log("InputClass Call Map callback");
         m_isMap = true;
     }
 
     private void InputInteract(InputAction.CallbackContext context)
     {
+        //Debug.Log("InputClass Call Interact callback");
         m_isInteract = true;
     }
 

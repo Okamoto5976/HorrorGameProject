@@ -6,8 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/HorrorGameProject/Scene/MainScene.unity
+    guid: 7757b060aa7de544f9300b051a9ab41f
+  - enabled: 1
+    path: Assets/HorrorGameProject/Scene/Stage-School.unity
+    guid: 38c7c08e07eb93247b2935cbfaed9d8b
+  - enabled: 1
+    path: Assets/HorrorGameProject/Scene/Stage-Tunnel.unity
+    guid: 5ee94e9beba8ccd49b2d8bd14269e433
+  - enabled: 1
+    path: Assets/HorrorGameProject/Scene/Stage-Temple.unity
+    guid: 846e1e9a7146f324aaefe2d0d9524e9c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

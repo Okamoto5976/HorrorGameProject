@@ -1,5 +1,7 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+
 public abstract class Entity : MonoBehaviour
 {
     //component
@@ -13,7 +15,12 @@ public abstract class Entity : MonoBehaviour
 
     [SerializeField] private float m_speed = 5f;
 
-    
+    protected virtual void Awake()
+    {
+        m_rb = GetComponent<Rigidbody>();
+        m_anim = GetComponentInChildren<Animator>();
+    }
+
     protected void OnMove()
     {
         //m_velocity = m_rb.linearVelocity;
