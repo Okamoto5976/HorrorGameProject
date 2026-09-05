@@ -17,7 +17,7 @@ public class MainManager : MonoBehaviour
     {
         if(Instance != null)
         {
-            Destroy(this);
+            Destroy(gameObject);
             return;
         }
 
