@@ -35,5 +35,9 @@ public abstract class Entity : MonoBehaviour
         m_velocity.x = m_moveInput.x * m_speed * 1.5f;
     }
 
-
+    protected void OnAddForce()
+    {
+        Debug.Log(m_moveInput);
+        m_rb.AddForce(m_moveInput.x * m_speed, m_moveInput.y, m_moveInput.z, ForceMode.Acceleration);
+    }
 }

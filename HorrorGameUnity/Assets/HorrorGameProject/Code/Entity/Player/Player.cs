@@ -40,6 +40,9 @@ public class Player : Entity
 
     public float Stamina { private set { m_stamina = Mathf.Clamp(value, 0f, 100f); } get => m_stamina; }
 
+    //player runtime
+    [SerializeField] private Vector3Asset m_playerPos;
+
     protected override void Awake()
     {
         base.Awake();
@@ -102,6 +105,8 @@ public class Player : Entity
 
     private void Update()
     {
+        m_playerPos.SetValue(transform.position);
+
         m_moveInput = m_input.MoveInput;
         m_isRunning = m_input.IsRun;
         m_isResting = m_input.IsRest;
