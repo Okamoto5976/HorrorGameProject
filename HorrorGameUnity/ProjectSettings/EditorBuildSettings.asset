@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/HorrorGameProject/Scene/StartScene.unity
+    guid: fac6f0f174fa9554f83bc217ff150aab
+  - enabled: 1
     path: Assets/HorrorGameProject/Scene/MainScene.unity
     guid: 7757b060aa7de544f9300b051a9ab41f
   - enabled: 1

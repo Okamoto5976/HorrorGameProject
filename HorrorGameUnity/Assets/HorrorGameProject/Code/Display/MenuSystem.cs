@@ -8,6 +8,7 @@ public class MenuSystem : MonoBehaviour
     public void InputOnMenu()
     {
         OnMenu(true);
+        OnOption(false);
     }
 
     public void InputOffMenu()
