@@ -2014,6 +2014,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DisplayCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 6611083053214644408, guid: 25f1197abe6f1cf4ca1a4923970c8f93, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6916832059686136860, guid: 25f1197abe6f1cf4ca1a4923970c8f93, type: 3}
       propertyPath: m_Pivot.x
       value: 0
