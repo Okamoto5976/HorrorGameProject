@@ -1,6 +1,8 @@
 using UnityEngine;
 
+
+
 public interface IInteractable
 {
-    public void OnInteract(Player player);
+    public Enum_InteractObj OnInteract(PlayerController player);
 }

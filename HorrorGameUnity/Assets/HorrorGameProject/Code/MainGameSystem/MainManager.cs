@@ -54,7 +54,7 @@ public class MainManager : MonoBehaviour
         return Vector3.zero;
     }
 
-    public void OnStageLoad(Enum_Stage nextStage, Enum_Stage nowStage, Player player, Vector3 pos)
+    public void OnStageLoad(Enum_Stage nextStage, Enum_Stage nowStage, PlayerController player, Vector3 pos)
     {
         string nextSceneName = GetStageSceneName(nextStage);
         string currentSceneName = GetStageSceneName(nowStage);

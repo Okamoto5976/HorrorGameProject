@@ -7,10 +7,10 @@ public class StageLoadManager : MonoBehaviour
     private string m_nextSceneName;
     private string m_currentSceneName;
 
-    private Player m_player;
+    private PlayerController m_player;
     private Vector3 m_pos;
 
-    public void OnLoadScene(string nextScene, string currentScene, Player player, Vector3 pos)
+    public void OnLoadScene(string nextScene, string currentScene, PlayerController player, Vector3 pos)
     {
         m_nextSceneName = nextScene;
         m_currentSceneName = currentScene;

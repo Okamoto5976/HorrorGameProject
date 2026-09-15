@@ -196,4 +196,7 @@ public class EnemyManager : MonoBehaviour
         //enemy not exist stage list
         return result;
     }
+
+    //ŠÖ”‚Ì–¼‘O
+    //
 }

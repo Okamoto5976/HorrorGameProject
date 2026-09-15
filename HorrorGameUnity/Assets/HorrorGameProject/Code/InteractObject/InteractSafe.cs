@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class InteractRest : MonoBehaviour, IInteractable
 {
-    public void OnInteract(Player player)
+    
+    [SerializeField] private Enum_InteractObj m_interactObj;
+
+    public Enum_InteractObj OnInteract(PlayerController player)
     {
-        player.OnInteractSafeProcess();
+        //player.OnInteractSafeProcess();
 
         //pos 
+
+        return m_interactObj;
     }
 }

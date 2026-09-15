@@ -2,12 +2,16 @@ using UnityEngine;
 
 public class InteractHide : MonoBehaviour, IInteractable
 {
-    public void OnInteract(Player player)
+    [SerializeField] private Enum_InteractObj m_interactObj;
+
+    public Enum_InteractObj OnInteract(PlayerController player)
     {
-        player.OnInteractHideProcess();
+        //player.OnInteractHideProcess();
 
         //display dark
 
         //if player stamina no, sound
+
+        return m_interactObj;
     }
 }

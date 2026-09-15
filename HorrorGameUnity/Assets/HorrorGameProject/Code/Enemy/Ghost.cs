@@ -23,7 +23,7 @@ public class Ghost : Entity
         if(m_state == GhostState.Move)
         {
             OnAddForce();
-            Debug.Log("Move");
+            //Debug.Log("Move");
 
         }
 

@@ -37,7 +37,7 @@ public abstract class Entity : MonoBehaviour
 
     protected void OnAddForce()
     {
-        Debug.Log(m_moveInput);
+        //Debug.Log(m_moveInput);
         m_rb.AddForce(m_moveInput.x * m_speed, m_moveInput.y, m_moveInput.z, ForceMode.Acceleration);
     }
 }

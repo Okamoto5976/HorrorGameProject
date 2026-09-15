@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MainSceneLoadingSystem : MonoBehaviour
 {
-    [SerializeField] private Player m_player;
+    [SerializeField] private PlayerController m_player;
     [SerializeField] private GameObject m_map;
 
     [SerializeField] private string m_startScene;
@@ -14,7 +14,7 @@ public class MainSceneLoadingSystem : MonoBehaviour
     {
         MainInitialize();
 
-        m_player.SetMap(m_map);
+        //m_player.SetMap(m_map);
     }
 
     private void MainInitialize()
