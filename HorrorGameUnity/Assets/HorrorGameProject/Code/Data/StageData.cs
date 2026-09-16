@@ -8,8 +8,8 @@ public class StageData : ScriptableObject
     public class StageConnectPoint
     {
         public Enum_Stage m_connectStage;
-        public Vector3 m_toPosition; //そのシーンに行くPosition
-        public Vector3 m_fromPosition; //そのシーンから来るPosition
+        public Vector3 m_destinationPosition; //向こうの入り口
+        public Vector3 m_entryPosition; //このステージからの入口
 
     }
 
@@ -25,15 +25,19 @@ public class StageData : ScriptableObject
     public List<StageConnectPoint> StageConnectPointList => m_stageConnectPoint;
     public string SceneName => m_sceneName;
 
-    //どこから
-    public Vector3 GetStageFromPosition(Enum_Stage from)
+    /// <summary>
+    /// 次のステージの出現場所の取得
+    /// </summary>
+    /// <param name="nextStage"></param>
+    /// <returns></returns>
+    public Vector3 GetDestinationPositionOfNextStage(Enum_Stage nextStage)
     {
         //null check
-        var point = m_stageConnectPoint.Find(x => x != null && x.m_connectStage == from);
+        var point = m_stageConnectPoint.Find(x => x != null && x.m_connectStage == nextStage);
 
         if (point != null)
         {
-            return point.m_fromPosition;
+            return point.m_destinationPosition;
         }
         else
         {

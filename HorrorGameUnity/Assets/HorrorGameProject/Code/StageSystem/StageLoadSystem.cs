@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StageLoadManager : MonoBehaviour
+public class StageLoadSystem : MonoBehaviour
 {
     private string m_nextSceneName;
     private string m_currentSceneName;
@@ -10,12 +10,18 @@ public class StageLoadManager : MonoBehaviour
     private PlayerController m_player;
     private Vector3 m_pos;
 
-    public void OnLoadScene(string nextScene, string currentScene, PlayerController player, Vector3 pos)
+    private Enum_Stage m_nextStage;
+
+    public void OnLoadScene(Enum_Stage nextStage, PlayerController player, Vector3 pos)
     {
-        m_nextSceneName = nextScene;
-        m_currentSceneName = currentScene;
+        var currentStage = GameManager.Instance.CurrentStage;
+
+        m_nextSceneName = StageManager.Instance.GetSceneName(nextStage);
+        m_currentSceneName = StageManager.Instance.GetSceneName(currentStage);
         m_player = player;
         m_pos = pos;
+
+        m_nextStage = nextStage;
 
         StartCoroutine(LoadSceneCoroutine());
     }
@@ -30,5 +36,6 @@ public class StageLoadManager : MonoBehaviour
 
         m_player.transform.position = m_pos;
 
+        GameManager.Instance.SetCurrentStage(m_nextStage);
     }
 }

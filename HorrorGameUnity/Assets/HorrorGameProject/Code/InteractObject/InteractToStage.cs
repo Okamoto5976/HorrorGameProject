@@ -4,7 +4,7 @@ public class InteractToStage : MonoBehaviour, IInteractable
 {
     private string m_viewName;
 
-    [SerializeField] private Enum_Stage m_toStage;
+    [SerializeField] private Enum_Stage m_nextStage;
 
     [SerializeField] private Enum_InteractObj m_interactObj;
 
@@ -16,11 +16,11 @@ public class InteractToStage : MonoBehaviour, IInteractable
 
     public Enum_InteractObj OnInteract(PlayerController player)
     {
-        var currentStage = MainManager.Instance.CurrentStage;
+        var currentStage = GameManager.Instance.CurrentStage;
 
-        Vector3 position = MainManager.Instance.GetNextStageFromPoint(m_toStage, currentStage);
+        Vector3 position = StageManager.Instance.GetDestinationPositionFromList(m_nextStage, currentStage);
 
-        MainManager.Instance.OnStageLoad(m_toStage, currentStage, player, position);
+        StageManager.Instance.OnStageLoad(m_nextStage, player, position);
 
         return m_interactObj;
     }

@@ -1,80 +1,35 @@
 using UnityEngine;
-using System.Collections.Generic;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MainManager : MonoBehaviour
 {
-    public static MainManager Instance;
+    [SerializeField] private PlayerController m_player;
+    //[SerializeField] private GameObject m_map;
 
-    [SerializeField] private List<StageData> m_stageDatas;
+    [SerializeField] private string m_startScene;
+    [SerializeField] private Enum_Stage m_startStage;
+    [SerializeField] private Vector3 m_startPos;
 
-    private Enum_Stage m_currentStage;
-
-    public Enum_Stage CurrentStage => m_currentStage;
-
-    private StageLoadManager m_stageLoadManager;
-
-    private void Awake()
+    private void Start()
     {
-        if(Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        MainInitialize();
 
-        Instance = this;
-        DontDestroyOnLoad(this.gameObject);
-
-        m_stageLoadManager = GetComponent<StageLoadManager>();
+        //m_player.SetMap(m_map);
     }
 
-    public void SetCurrentStage(Enum_Stage stage)
+    private void MainInitialize()
     {
-        m_currentStage = stage;
+        var name = StageManager.Instance.GetSceneName(m_startStage);
+
+        StartCoroutine(LoadSceneCoroutine(name));
     }
 
-    /// <summary>
-    /// 次のステージの初期位置を取得する
-    /// </summary>
-    /// <param name="nextStage">どのステージに行くか</param>
-    /// <param name="nowStage">今どのステージにいるか</param>
-    /// <returns>次のステージのスポーン場所</returns>
-    public Vector3 GetNextStageFromPoint(Enum_Stage nextStage, Enum_Stage nowStage)
+    private IEnumerator LoadSceneCoroutine(string sceneName)
     {
-        var stage = m_stageDatas.Find(x => x != null && x.MyStage == nextStage);
+        yield return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 
-        if(stage != null)
-        {
-            return stage.GetStageFromPosition(nowStage);
-        }
-        else
-        {
-            Debug.LogError("Null StageData in StageDatas");
-        }
+        m_player.transform.position = m_startPos;
 
-        return Vector3.zero;
-    }
-
-    public void OnStageLoad(Enum_Stage nextStage, Enum_Stage nowStage, PlayerController player, Vector3 pos)
-    {
-        string nextSceneName = GetStageSceneName(nextStage);
-        string currentSceneName = GetStageSceneName(nowStage);
-
-        m_stageLoadManager.OnLoadScene(nextSceneName, currentSceneName, player, pos);
-    }
-
-    private string GetStageSceneName(Enum_Stage stage)
-    {
-        var data = m_stageDatas.Find(x => x != null && x.MyStage == stage);
-
-        if (data != null)
-        {
-            return data.SceneName;
-        }
-        else
-        {
-            Debug.LogError("Null StageData in StageDatas");
-        }
-
-        return null;
     }
 }

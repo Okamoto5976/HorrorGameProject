@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/HorrorGameProject/Scene/Stage-Tunnel.unity
     guid: 5ee94e9beba8ccd49b2d8bd14269e433
   - enabled: 1
-    path: Assets/HorrorGameProject/Scene/Stage-Temple.unity
+    path: Assets/HorrorGameProject/Scene/Stage-Shrine.unity
     guid: 846e1e9a7146f324aaefe2d0d9524e9c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

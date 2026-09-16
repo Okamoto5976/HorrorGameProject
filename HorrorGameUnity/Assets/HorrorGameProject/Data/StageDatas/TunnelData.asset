@@ -15,9 +15,9 @@ MonoBehaviour:
   m_mystage: 1
   m_stageConnectPoint:
   - m_connectStage: 0
-    m_toPosition: {x: 12, y: 0.5, z: 0}
-    m_fromPosition: {x: -12, y: 0.5, z: 0}
+    m_destinationPosition: {x: 10, y: 0, z: 0}
+    m_entryPosition: {x: -10, y: 0, z: 0}
   - m_connectStage: 2
-    m_toPosition: {x: -12, y: 0.5, z: 0}
-    m_fromPosition: {x: 12, y: 0.5, z: 0}
+    m_destinationPosition: {x: -10, y: 0, z: 0}
+    m_entryPosition: {x: 10, y: 0, z: 0}
   m_sceneName: Stage-Tunnel

@@ -18,6 +18,7 @@ public class InputProvider
     public event Action OnRest;
     public event Action OnMap;
     public event Action OnInteract;
+    public event Action OnMenu;
 
 
 
@@ -25,6 +26,8 @@ public class InputProvider
     {
         m_input = new InputSystem_Actions();
 
+
+        //Player---------
         m_input.Player.Move.performed += InputMove;
         m_input.Player.Move.canceled += InputMove;
 
@@ -35,10 +38,12 @@ public class InputProvider
         m_input.Player.Map.performed += InputMap;
         m_input.Player.Interact.performed += InputInteract;
 
+
+        //UI------------
+        m_input.UI.Menu.performed += InputMenu;
+
+
         m_input.Enable();
-
-
-
     }
 
     public void Disable()
@@ -91,6 +96,11 @@ public class InputProvider
         //Debug.Log("InputClass Call Interact callback");
         //m_isInteract = true;
         OnInteract?.Invoke();
+    }
+
+    private void InputMenu(InputAction.CallbackContext context)
+    {
+        OnMenu?.Invoke();
     }
 
     //public Vector2 MoveInput

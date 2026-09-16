@@ -17,13 +17,18 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] private int m_clearCount;
+    public int ClearCount => m_clearCount;
+
+
+    private Enum_Stage m_currentStage;
+    public Enum_Stage CurrentStage => m_currentStage;
+
+
 
     private int m_collectHead;
-
-    //propaty
-    public int ClearCount => m_clearCount;
     public int CollectHead => m_collectHead;
 
+    public void SetCurrentStage(Enum_Stage stage) => m_currentStage = stage;
 
     public void GameOver()
     {
