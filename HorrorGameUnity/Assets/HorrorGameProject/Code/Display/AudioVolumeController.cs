@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Audio;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class AudioVolumeController : MonoBehaviour
@@ -18,12 +17,19 @@ public class AudioVolumeController : MonoBehaviour
     private string m_seName = "SE_Volume";
     private string m_voiceName = "Voice_Volume";
 
+    private OptionSaveClass m_optionSaveClass;
 
+    private void Awake()
+    {
+        m_optionSaveClass = new OptionSaveClass();
+    }
 
     private void Start()
     {
-        TestSet();
         //get value from save
+        var optionData = m_optionSaveClass.LoadOptionData();
+
+        SetAudioMixer(optionData);
 
         //set value of slider
         SetValueOfSlider(m_masterName, m_masterSlider);
@@ -33,12 +39,24 @@ public class AudioVolumeController : MonoBehaviour
 
     }
 
-    private void TestSet()
+    private void SetAudioMixer(OptionSaveData data)
     {
-        m_audioMixer.SetFloat(m_masterName, -0f);
-        m_audioMixer.SetFloat(m_bgmName, -0f);
-        m_audioMixer.SetFloat(m_seName, -0f);
-        m_audioMixer.SetFloat(m_voiceName, -0f);
+        if(data  != null)
+        {
+            m_audioMixer.SetFloat(m_masterName, data.m_masterVolume);
+            m_audioMixer.SetFloat(m_bgmName, data.m_bgmVolume);
+            m_audioMixer.SetFloat(m_seName, data.m_seVolume);
+            m_audioMixer.SetFloat(m_voiceName, data.m_voiceVolume);
+        }
+        else
+        {
+            m_audioMixer.SetFloat(m_masterName, -0f);
+            m_audioMixer.SetFloat(m_bgmName, -0f);
+            m_audioMixer.SetFloat(m_seName, -0f);
+            m_audioMixer.SetFloat(m_voiceName, -0f);
+
+            Debug.Log("Initialize Set AudioVolume");
+        }
 
     }
 
@@ -64,6 +82,9 @@ public class AudioVolumeController : MonoBehaviour
         {
             m_audioMixer.SetFloat(m_masterName, Mathf.Log10(volume) * 20);
         }
+
+        SaveOptionData();
+
     }
 
     public void SetBGMVolume(float volume)
@@ -76,6 +97,9 @@ public class AudioVolumeController : MonoBehaviour
         {
             m_audioMixer.SetFloat(m_bgmName, Mathf.Log10(volume) * 20);
         }
+
+        SaveOptionData();
+
     }
 
     public void SetSEVolume(float volume)
@@ -88,6 +112,9 @@ public class AudioVolumeController : MonoBehaviour
         {
             m_audioMixer.SetFloat(m_seName, Mathf.Log10(volume) * 20);
         }
+
+        SaveOptionData();
+
     }
 
     public void SetVoiceVolume(float volume)
@@ -100,5 +127,23 @@ public class AudioVolumeController : MonoBehaviour
         {
             m_audioMixer.SetFloat(m_voiceName, Mathf.Log10(volume) * 20);
         }
+
+        SaveOptionData();
+    }
+
+    private void SaveOptionData()
+    {
+        OptionSaveData data = new OptionSaveData();
+
+        m_audioMixer.GetFloat(m_masterName, out float masterValue);
+        data.m_masterVolume = masterValue;
+        m_audioMixer.GetFloat(m_bgmName, out float bgmValue);
+        data.m_bgmVolume = bgmValue;
+        m_audioMixer.GetFloat(m_seName, out float seVolume);
+        data.m_seVolume = seVolume;
+        m_audioMixer.GetFloat(m_voiceName, out float voiceVolume);
+        data.m_voiceVolume = voiceVolume;
+
+        m_optionSaveClass.SaveOptionData(data);
     }
 }
