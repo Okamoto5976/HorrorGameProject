@@ -303,7 +303,16 @@ public class EnemyManager : MonoBehaviour
 
     public List<EnemyPlaceClass> GetEnemies(Enum_Stage stage)
     {
-        return m_stagePlacementList.Find(x => x != null && x.Stage == stage).EnemyList;
+        //return m_stagePlacementList.Find(x => x != null && x.Stage == stage).EnemyList;
+
+        StagePlacementClass placement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
+
+        if (placement == null)
+        {
+            return null;
+        }
+
+        return placement.EnemyList;
     }
 
     //Player move Stage => Stage in Enemy Get info  class stage or enemyList

@@ -21,6 +21,8 @@ public class EnemyGenerater : MonoBehaviour
         //そのステージにいる敵のListをGet
         List<EnemyPlaceClass> enemyClasses = m_enemyManager.GetEnemies(stage);
 
+        if (enemyClasses == null) return;
+
         
 
         for(int i = 0; i < enemyClasses.Count; i++)
