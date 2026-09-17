@@ -1,8 +1,311 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+//‚»‚ÌƒXƒe[ƒW‚²‚Æ‚Ì“G‚ÌList
+public class StagePlacementClass
+{
+    public StagePlacementClass(
+        Enum_Stage stage
+        )
+    {
+        m_stage = stage;
+    }
+
+    private Enum_Stage m_stage;
+
+    private List<EnemyPlaceClass> m_enemyList = new();
+
+    public Enum_Stage Stage => m_stage;
+    public List<EnemyPlaceClass> EnemyList => m_enemyList;
+
+    /// <summary>
+    /// “G‚ğ’Ç‰Á‚·‚éˆ—
+    /// </summary>
+    public void AddEnemy(EnemyPlaceClass enemyClass)
+    {
+        m_enemyList.Add(enemyClass);
+    }
+
+    /// <summary>
+    /// “G‚ÌID‚ğ“n‚·‚Æ’T‚·ˆ—
+    /// </summary>
+    //if enemy move another stage, remove enemy in list, new add in next stage
+    public EnemyPlaceClass GetEnemyByID(int ID)
+    {
+        EnemyPlaceClass enemyClass = m_enemyList.Find(x => x != null && x.Id == ID);
+
+        if (enemyClass == null)
+        {
+            //Debug.Log($"{m_stage}: not enemy by id");
+            return null;
+        }
+        //Debug.Log($"{m_stage}: find enemy by id");
+
+        m_enemyList.Remove(enemyClass);
+
+        return enemyClass;
+    }
+
+    /// <summary>
+    /// “G‚Ìƒ^ƒCƒv‚Å“¯‚¶í—Ş‚Ì“G‚ª‚¢‚é‚©‚Ç‚¤‚©•Ô‚·ˆ—
+    /// </summary>
+    public bool HasEnemy(Enum_Enemy enemy)
+    {
+        return m_enemyList.Exists(x => x.Enemy == enemy);
+    }
+}
+
+
+//“G‚Ìí—Ş‚ÆID
+public class EnemyPlaceClass
+{
+    public EnemyPlaceClass(
+        Enum_Enemy enemy,
+        int id
+        )
+    {
+        m_enemy = enemy;
+        m_id = id;
+    }
+
+    private Enum_Enemy m_enemy;
+    private int m_id;
+
+    public Enum_Enemy Enemy => m_enemy;
+    public int Id => m_id;
+}
+
 public class EnemyManager : MonoBehaviour
 {
+    //“GŒÂ‘Ì‚²‚Æ‚Ìî•ñ
+    public class EnemyInfo
+    {
+        public EnemyInfo(
+            int id,
+            Enum_Enemy enemy,
+            float frequencyTime
+            )
+        {
+            m_id = id;
+            m_enemy = enemy;
+            m_frequencyTime = frequencyTime;
+
+            m_currentTime = m_frequencyTime;
+        }
+
+        private int m_id;
+        private Enum_Enemy m_enemy;
+        private float m_frequencyTime;
+
+        public float m_currentTime;
+
+        public int ID => m_id;
+        public Enum_Enemy Enemy => m_enemy;
+
+        public void SetCurrentTime()
+        {
+            m_currentTime = m_frequencyTime;
+        }
+    }
+
+    [SerializeField] private List<EnemyData> m_enemyData = new();
+
+    [SerializeField] private List<Enum_Stage> m_setStagePlacement = new();
+
+    [SerializeField] private List<EnemyInfo> m_enemyInfoList = new();
+
+    private List<StagePlacementClass> m_stagePlacementList = new();
+
+    //Component
+    //[SerializeField] private EnemyGenerater m_enemyGenerate;
+
+    private void Start()
+    {
+        SetStagePlacementClass();
+    }
+
+    /// <summary>
+    /// “G‚ªoŒ»‚·‚éStageList‚²‚Æ‚ÉƒXƒe[ƒWƒNƒ‰ƒX‚ğì‚é
+    /// </summary>
+    private void SetStagePlacementClass()
+    {
+        for(int i = 0; i < m_setStagePlacement.Count; i++)
+        {
+            Enum_Stage stage = m_setStagePlacement[i];
+
+            var stageClass = new StagePlacementClass(stage);
+
+            m_stagePlacementList.Add(stageClass);
+        }
+    }
+
+    //look maxExistNum or need ID
+    //new enemy class
+    //EnemyPlaceClass enemyClass = new
+    //(
+    //    enemy,
+    //    id
+    //);
+
+    private int m_nextID = 1;
+
+    [ContextMenu("Test Add Enemy")]
+    public void TestAddEnemy()
+    {
+        var enemy = Enum_Enemy.Ghost;
+
+        //make info
+        var info = MakeEnemyInfo(enemy, m_nextID);
+        
+        m_enemyInfoList.Add(info);
+
+        //make EnemyPlaceClass
+        EnemyPlaceClass enemyClass = new(enemy, m_nextID);
+
+        AddEnemy(enemyClass);
+
+        m_nextID++;
+    }
+
+    private void Update()
+    {
+        for(int i = 0; i < m_enemyInfoList.Count; i++)
+        {
+            m_enemyInfoList[i].m_currentTime -= Time.deltaTime;
+
+            if (m_enemyInfoList[i].m_currentTime <= 0)
+            {
+                //“G‚ğˆÚ“®‚³‚¹‚éˆ—
+                MoveEnemy(m_enemyInfoList[i]);
+
+                //Debug.LogWarning($"{m_enemyInfoList[i].ID}:{m_enemyInfoList[i].Enemy} -> Move Enemy");
+
+                //“G‚ÌTime‚ğƒŠƒZƒbƒg
+                m_enemyInfoList[i].SetCurrentTime();
+            }
+        }
+    }
+
+    /// <summary>
+    /// V‚µ‚­EnemyInfoi“G‚Ìî•ñj‚ğì‚éˆ—
+    /// </summary>
+    /// <returns>o—ˆ‚½EnemyInfo‚ğ•Ô‚·</returns>
+    private EnemyInfo MakeEnemyInfo(Enum_Enemy enemy, int id)
+    {
+        EnemyData data = m_enemyData.Find(x => x != null && x.Enemy == enemy);
+
+        EnemyInfo info = new EnemyInfo(id, data.Enemy, data.FrequencyTime);
+
+        return info;
+    }
+
+    /// <summary>
+    /// V‚µ‚­“G‚ğ”z’u‚·‚éˆ—
+    /// </summary>
+    public void AddEnemy(EnemyPlaceClass enemyClass)
+    {
+        List<Enum_Stage> canStageList = GetEnemyPlacementStageData(enemyClass.Enemy);
+
+        if (canStageList.Count <= 0)
+        {
+            Debug.LogWarning("Not find can stage");
+            return;
+        }
+
+        //select random from canStageList----------------
+        int num = Random.Range(0, canStageList.Count);
+
+        Enum_Stage stage = canStageList[num];
+
+        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
+        //-----------------------------------------------
+
+        //add Enemy in stage to select
+        stagePlacement.AddEnemy(enemyClass);
+
+        Debug.Log($"{enemyClass.Id}:{enemyClass.Enemy} -> move {stage}");
+    }
+
+    /// <summary>
+    /// Šù‘¶‚Ì“G‚ªƒXƒe[ƒW‚ğ“®‚­ˆ—
+    /// </summary>
+    private void MoveEnemy(EnemyInfo info)
+    {
+        //‚Ü‚¸ƒ‰ƒ“ƒ_ƒ€‚ÉŸ‚És‚­êŠ‚ğ’T‚·
+        List<Enum_Stage> canStageList = GetEnemyPlacementStageData(info.Enemy);
+
+        if (canStageList.Count <= 0)
+        {
+            Debug.LogWarning("Not find can stage");
+            return;
+        }
+        int num = Random.Range(0, canStageList.Count);
+
+        Enum_Stage stage = canStageList[num];
+
+        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
+        //-------------------------------------
+
+
+
+        EnemyPlaceClass enemyClass = null;
+
+        //“¯‚¶Id‚Ì“G‚ğ’T‚·
+        for(int i = 0; i < m_stagePlacementList.Count; i++)
+        {
+            enemyClass = m_stagePlacementList[i].GetEnemyByID(info.ID);
+
+            if(enemyClass != null)
+            {
+                //Debug.LogWarning("Find enemy by id");
+
+                break;
+            }
+        }
+
+        if(enemyClass == null)
+        {
+            Debug.LogWarning("Not find enemy by id");
+            return;
+        }
+
+        stagePlacement.AddEnemy(enemyClass);
+        Debug.Log($"{enemyClass.Id}:{enemyClass.Enemy} -> move {stage}");
+
+        //StagePlacementClass‚ğ”²‚«@V‚µ‚­ˆÚ“®‚³‚¹‚éiAdd)
+
+    }
+
+    /// <summary>
+    /// ‰Â“®ˆæƒXƒe[ƒW‚©‚çŒ»İ“G‚ª‚¢‚È‚¢StageList‚ğ‘—‚é
+    /// </summary>
+    private List<Enum_Stage> GetEnemyPlacementStageData(Enum_Enemy enemy)
+    {
+        var canStageList = m_enemyData.Find(x => x != null && x.Enemy == enemy).CanStageList;
+
+        List<Enum_Stage> result = new();
+
+        foreach (Enum_Stage canStage in canStageList)
+        {
+            StagePlacementClass stageData = m_stagePlacementList.Find(x => x != null && x.Stage == canStage);
+
+            if (stageData == null) continue;
+
+            if (!stageData.HasEnemy(enemy))
+            {
+                result.Add(stageData.Stage);
+            }
+        }
+
+        //enemy not exist stage list
+        return result;
+    }
+
+    public List<EnemyPlaceClass> GetEnemies(Enum_Stage stage)
+    {
+        return m_stagePlacementList.Find(x => x != null && x.Stage == stage).EnemyList;
+    }
+
     //Player move Stage => Stage in Enemy Get info  class stage or enemyList
     //Update Frame...  enemy in time if 0    Get CanStageList in enemyData    Remove and new Add
     //canStageList random...  but Stage have limit 
@@ -46,171 +349,5 @@ public class EnemyManager : MonoBehaviour
     //}
 
 
-    //‚»‚ÌƒXƒe[ƒW‚Ì’†‚É‚Ç‚Ì“G‚ª‚¢‚é‚Ì‚©
-    public class StagePlacementClass
-    {
-        public StagePlacementClass(
-            Enum_Stage stage
-            )
-        {
-            m_stage = stage;
-        }
 
-        private Enum_Stage m_stage;
-
-        private List<EnemyPlaceClass> m_enemyList = new();
-
-        public Enum_Stage Stage => m_stage;
-        public List<EnemyPlaceClass> EnemyList => m_enemyList;
-        
-        /// <summary>
-        /// “G‚ğ’Ç‰Á‚·‚éˆ—
-        /// </summary>
-        public void AddEnemy(EnemyPlaceClass enemyClass)
-        {
-            m_enemyList.Add(enemyClass);
-        }
-
-        /// <summary>
-        /// “G‚ÌID‚ğ“n‚·‚Æ’T‚·ˆ—
-        /// </summary>
-        //if enemy move another stage, remove enemy in list, new add in next stage
-        public EnemyPlaceClass GetEnemyClass(int ID)
-        {
-            EnemyPlaceClass enemyClass = m_enemyList.Find(x => x != null && x.Id == ID);
-
-            m_enemyList.Remove(enemyClass);
-
-            return enemyClass;
-        }
-
-        /// <summary>
-        /// “G‚Ìƒ^ƒCƒv‚Å“¯‚¶í—Ş‚Ì“G‚ª‚¢‚é‚©‚Ç‚¤‚©•Ô‚·ˆ—
-        /// </summary>
-        public bool HasEnemy(Enum_Enemy enemy)
-        {
-            return m_enemyList.Exists(x => x.Enemy == enemy);
-        }
-    }
-
-
-    //“G‚Ìí—Ş‚ÆID
-    public class EnemyPlaceClass
-    { 
-        public EnemyPlaceClass(
-            Enum_Enemy enemy,
-            int id
-            )
-        {
-            m_enemy = enemy;
-            m_id = id;
-        }
-
-        private Enum_Enemy m_enemy;
-        private int m_id;
-
-        public Enum_Enemy Enemy => m_enemy;
-        public int Id => m_id;
-    }
-
-    //“GŒÂ‘Ì‚²‚Æ‚Ìî•ñ
-    public class EnemyInfo
-    {
-        public EnemyInfo(
-            int id
-            )
-        {
-            m_id = id;
-        }
-
-        private int m_id;
-        private Enum_Enemy m_enemy;
-        private float m_frequencyTime;
-
-        public int ID => m_id;
-        public Enum_Enemy Enemy => m_enemy;
-    }
-
-    [SerializeField] private List<EnemyData> m_enemyData = new();
-
-    [SerializeField] private List<Enum_Stage> m_setStagePlacement = new();
-
-    private List<StagePlacementClass> m_stagePlacementList = new();
-
-    private void Start()
-    {
-        SetStagePlacementClass();
-    }
-
-    private void SetStagePlacementClass()
-    {
-        for(int i = 0; i < m_setStagePlacement.Count; i++)
-        {
-            Enum_Stage stage = m_setStagePlacement[i];
-
-            var stageClass = new StagePlacementClass(stage);
-
-            m_stagePlacementList.Add(stageClass);
-        }
-    }
-
-    //look maxExistNum or need ID
-    //new enemy class
-    //EnemyPlaceClass enemyClass = new
-    //(
-    //    enemy,
-    //    id
-    //);
-    public void SetNewEnemy(Enum_Enemy enemy, EnemyPlaceClass enemyClass)
-    {
-        List<Enum_Stage> canStageList = GetEnemyPlacementStageData(enemy);
-
-        if (canStageList.Count <= 0)
-        {
-            Debug.LogWarning("Not find can stage");
-            return;
-        }
-
-        //select random from canStageList----------------
-        int num = Random.Range(0, canStageList.Count);
-
-        Enum_Stage stage = canStageList[num];
-
-        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
-        //-----------------------------------------------
-
-        //add Enemy in stage to select
-        stagePlacement.AddEnemy(enemyClass);
-    }
-
-    public void SetAlreadyEnemy(Enum_Enemy enemy, int id)
-    {
-        //once remove enemy in stage (move enemy
-    }
-
-    ////enemy exist num
-    public List<Enum_Stage> GetEnemyPlacementStageData(Enum_Enemy enemy)
-    {
-        var canStageList = m_enemyData.Find(x => x != null && x.Enemy == enemy).CanStageList;
-
-        List<Enum_Stage> result = new();
-
-        foreach (Enum_Stage canStage in canStageList)
-        {
-            StagePlacementClass stageData = m_stagePlacementList.Find(x => x != null && x.Stage == canStage);
-
-            if(stageData == null) continue;
-
-            if(!stageData.HasEnemy(enemy))
-            {
-                result.Add(stageData.Stage);
-            }
-        }
-
-        //enemy not exist stage list
-        return result;
-    }
-
-    //ŠÖ”‚Ì–¼‘O
-    //
 }

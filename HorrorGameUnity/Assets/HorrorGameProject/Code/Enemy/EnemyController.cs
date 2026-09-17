@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class Ghost : Entity
+[RequireComponent (typeof(ReturnPool))]
+public class EnemyController : MonoBehaviour
 {
     public enum GhostState
     { 
@@ -16,13 +17,20 @@ public class Ghost : Entity
     //get playerPos
     [SerializeField] private Vector3Asset m_playerPos;
 
+    private ReturnPool m_returnPool;
+
+    private void Awake()
+    {
+        m_returnPool = GetComponent<ReturnPool>();
+    }
+
     private void FixedUpdate()
     {
         //m_velocity = m_rb.linearVelocity;
         
         if(m_state == GhostState.Move)
         {
-            OnAddForce();
+            //OnAddForce();
             //Debug.Log("Move");
 
         }
@@ -50,11 +58,11 @@ public class Ghost : Entity
     {
         if(m_playerPos.Value.x < transform.position.x)
         {
-            m_moveInput.x = -1f;
+            //m_moveInput.x = -1f;
         }
         else
         {
-            m_moveInput.x = 1f;
+            //m_moveInput.x = 1f;
         }
     }
 
@@ -63,5 +71,10 @@ public class Ghost : Entity
         if (m_state == state) return;
 
         m_state = state;
+    }
+
+    public void ReturnPool()
+    {
+        m_returnPool.CallReturnPool();
     }
 }

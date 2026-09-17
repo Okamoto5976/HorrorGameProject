@@ -24,3 +24,9 @@ MonoBehaviour:
     m_destinationPosition: {x: -40, y: 0, z: 0}
     m_entryPosition: {x: 40, y: 0, z: 0}
   m_sceneName: Stage-Tunnel
+  m_enemySpawnPoses:
+  - m_enemy: 0
+    m_positions:
+    - {x: 0, y: 0, z: 0}
+    - {x: 20, y: 0, z: 0}
+    - {x: -20, y: 0, z: 0}

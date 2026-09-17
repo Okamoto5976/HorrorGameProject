@@ -9,7 +9,7 @@ public class ReturnPool : MonoBehaviour
         m_pool = pool;
     }
 
-    public void OnReturnPool()
+    public void CallReturnPool()
     {
         m_pool.ReturnPool(this.gameObject);
     }

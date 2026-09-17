@@ -70,4 +70,24 @@ public class StageManager : MonoBehaviour
     {
         m_stageLoadManager.OnLoadScene(nextStage, player, pos);
     }
+
+    /// <summary>
+    /// 渡したステージの　渡した敵が出現できるポジションを返す
+    /// </summary>
+    /// <returns></returns>
+    public EnemySpawnPosition GetEnemySpawnPosition(Enum_Stage stage, Enum_Enemy enemy)
+    {
+        var data = GetStageData(stage);
+
+        return data.GetEnemySpawnPos(enemy);
+    }
+
+    /// <summary>
+    /// StageDataを返す
+    /// </summary>
+    /// <returns></returns>
+    public StageData GetStageData(Enum_Stage stage)
+    {
+        return m_stageDatas.Find(x => x != null && x.MyStage == stage);
+    }
 }
