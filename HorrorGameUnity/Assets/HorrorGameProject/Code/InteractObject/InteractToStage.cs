@@ -6,7 +6,7 @@ public class InteractToStage : MonoBehaviour, IInteractable
 
     [SerializeField] private Enum_Stage m_nextStage;
 
-    [SerializeField] private Enum_InteractObj m_interactObj;
+    private Enum_InteractObj m_interactObj = Enum_InteractObj.MoveStage;
 
     //public void Initialized(StageData data, Enum_Stage toStage)
     //{

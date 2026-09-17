@@ -1124,7 +1124,7 @@ Transform:
   m_GameObject: {fileID: 1079480965}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.14815, y: -7.60025, z: 50.87065}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1515,7 +1515,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85f4954ac031038469a47cb967a55ac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 5
+  speed: 20
 --- !u!54 &1529589301
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1541,7 +1541,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!1 &1616076858
 GameObject:
@@ -1574,9 +1574,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainManager
   m_stageDatas:
-  - {fileID: 11400000, guid: f1e7dacff5061f04bbe4508dbf392323, type: 2}
-  - {fileID: 11400000, guid: 43d1c972a561b954c8638bb493047315, type: 2}
+  - {fileID: 11400000, guid: 00cec6d293e2bcf4b8fa9beef93f6baf, type: 2}
+  - {fileID: 11400000, guid: 8ef8f2e3b1ece4a40bdfded0de9f082c, type: 2}
   - {fileID: 11400000, guid: ac1326a2ea4d0ca4f862eb0004394d86, type: 2}
+  - {fileID: 11400000, guid: b50f300d435d2d647a24d224c63ee288, type: 2}
+  - {fileID: 11400000, guid: e48ffdfcd1bdd0941a41099b49959332, type: 2}
+  - {fileID: 11400000, guid: f1e7dacff5061f04bbe4508dbf392323, type: 2}
+  - {fileID: 11400000, guid: 73576350f698d1f4790e9401b36a2411, type: 2}
+  - {fileID: 11400000, guid: 0890397dbb3e8414295c2175a0557749, type: 2}
+  - {fileID: 11400000, guid: 43d1c972a561b954c8638bb493047315, type: 2}
 --- !u!4 &1616076860
 Transform:
   m_ObjectHideFlags: 0

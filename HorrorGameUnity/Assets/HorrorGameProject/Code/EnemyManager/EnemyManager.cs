@@ -45,6 +45,8 @@ public class EnemyManager : MonoBehaviour
     //  list = { (Enum_Enemy, ID).... }
     //}
 
+
+    //‚»‚ÌƒXƒe[ƒW‚Ì’†‚É‚Ç‚Ì“G‚ª‚¢‚é‚Ì‚©
     public class StagePlacementClass
     {
         public StagePlacementClass(
@@ -61,11 +63,17 @@ public class EnemyManager : MonoBehaviour
         public Enum_Stage Stage => m_stage;
         public List<EnemyPlaceClass> EnemyList => m_enemyList;
         
+        /// <summary>
+        /// “G‚ğ’Ç‰Á‚·‚éˆ—
+        /// </summary>
         public void AddEnemy(EnemyPlaceClass enemyClass)
         {
             m_enemyList.Add(enemyClass);
         }
 
+        /// <summary>
+        /// “G‚ÌID‚ğ“n‚·‚Æ’T‚·ˆ—
+        /// </summary>
         //if enemy move another stage, remove enemy in list, new add in next stage
         public EnemyPlaceClass GetEnemyClass(int ID)
         {
@@ -76,12 +84,17 @@ public class EnemyManager : MonoBehaviour
             return enemyClass;
         }
 
+        /// <summary>
+        /// “G‚Ìƒ^ƒCƒv‚Å“¯‚¶í—Ş‚Ì“G‚ª‚¢‚é‚©‚Ç‚¤‚©•Ô‚·ˆ—
+        /// </summary>
         public bool HasEnemy(Enum_Enemy enemy)
         {
             return m_enemyList.Exists(x => x.Enemy == enemy);
         }
     }
 
+
+    //“G‚Ìí—Ş‚ÆID
     public class EnemyPlaceClass
     { 
         public EnemyPlaceClass(
@@ -100,6 +113,7 @@ public class EnemyManager : MonoBehaviour
         public int Id => m_id;
     }
 
+    //“GŒÂ‘Ì‚²‚Æ‚Ìî•ñ
     public class EnemyInfo
     {
         public EnemyInfo(
