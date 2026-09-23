@@ -124,12 +124,13 @@ public class EnemyManager : MonoBehaviour
         SetStagePlacementClass();
     }
 
+    
     /// <summary>
     /// 敵が出現するStageListごとにステージクラスを作る
     /// </summary>
     private void SetStagePlacementClass()
     {
-        for(int i = 0; i < m_setStagePlacement.Count; i++)
+        for (int i = 0; i < m_setStagePlacement.Count; i++)
         {
             Enum_Stage stage = m_setStagePlacement[i];
 
@@ -149,6 +150,8 @@ public class EnemyManager : MonoBehaviour
 
     private int m_nextID = 1;
 
+
+    //call GameStart
     [ContextMenu("Test Add Enemy")]
     public void TestAddEnemy()
     {

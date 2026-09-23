@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
     [SerializeField] private int m_clearCount;
@@ -55,9 +54,12 @@ public class GameManager : MonoBehaviour
         m_gameTimer -= Time.deltaTime;
     }
 
+    //call frome shrine
     public void StartGame()
     {
         m_isGameStart = true;
+
+        //Enemy Generate Start
     }
 
     public void AddCollect()
@@ -91,5 +93,24 @@ public class GameManager : MonoBehaviour
         //event
 
         Debug.LogWarning("Game Clear");
+    }
+
+    //Save process------------------------------
+
+    public GameSaveData SaveGameData(GameSaveData data)
+    {
+        data.time = m_gameTimer;
+        data.collect = m_collectHead;
+        data.stage = m_currentStage;
+
+        return data;
+    }
+
+    public void SetGameData(GameSaveData data)
+    {
+        m_gameTimer = data.time;
+        m_collectHead = data.collect;
+
+        m_isGameStart = true;
     }
 }

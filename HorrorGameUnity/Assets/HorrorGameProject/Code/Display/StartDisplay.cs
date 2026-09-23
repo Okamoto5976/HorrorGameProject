@@ -35,12 +35,12 @@ public class StartDisplay : MonoBehaviour
 
     public void OnStart()
     {
-        LoadManager.Instance.OnMainLoad("MainScene");
+        LoadManager.Instance.OnStart("MainScene");
     }
 
     public void OnLoad()
     {
-
+        LoadManager.Instance.OnLoad("MainScene");
     }
 
     public void OnOption()

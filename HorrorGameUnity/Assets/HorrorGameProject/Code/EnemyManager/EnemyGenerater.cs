@@ -12,6 +12,10 @@ public class EnemyGenerater : MonoBehaviour
     //call Move Scene
     public void GenerateEnemy(Enum_Stage stage)
     {
+        if (!GameManager.Instance.IsGameStart) return;
+
+        Debug.LogWarning($"StageMove : Set Enemy in next stage : {stage}");
+
         //‘¶İ‚·‚é“G‚ğPool‚É–ß‚·
         for(int e = 0; e < m_enemyList.Count; e++)
         {

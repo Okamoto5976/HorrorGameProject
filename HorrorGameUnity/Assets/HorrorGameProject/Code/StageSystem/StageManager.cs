@@ -18,7 +18,6 @@ public class StageManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(this.gameObject);
 
         m_stageLoadManager = GetComponent<StageLoadSystem>();
     }

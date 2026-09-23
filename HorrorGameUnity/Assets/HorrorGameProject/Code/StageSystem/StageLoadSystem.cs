@@ -12,7 +12,8 @@ public class StageLoadSystem : MonoBehaviour
 
     private Enum_Stage m_nextStage;
 
-    [SerializeField] private EnemyGenerater m_enemyGenerater;
+    [SerializeField] private MainManager m_mainManager;
+
 
     public void OnLoadScene(Enum_Stage nextStage, PlayerController player, Vector3 pos)
     {
@@ -38,8 +39,6 @@ public class StageLoadSystem : MonoBehaviour
 
         m_player.transform.position = m_pos;
 
-        m_enemyGenerater.GenerateEnemy(m_nextStage);
-
-        GameManager.Instance.SetCurrentStage(m_nextStage);
+        m_mainManager.InitStage(m_nextStage);
     }
 }
