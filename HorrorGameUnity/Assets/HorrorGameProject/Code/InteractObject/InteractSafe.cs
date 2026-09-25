@@ -1,27 +1,26 @@
 using System.Collections;
 using UnityEngine;
 
-public class InteractRest : MonoBehaviour, IInteractable
+public class InteractSafe : MonoBehaviour, IInteractable
 {
     
     private Enum_InteractObj m_interactObj = Enum_InteractObj.Safe;
 
-    public Enum_InteractObj OnInteract(PlayerController player)
+    public void OnInteract(PlayerController player)
     {
         if (!GameManager.Instance.IsGameStart)
         {
             Debug.LogWarning("‚Ü‚¾Safe‚ª‹N“®‚µ‚Ä‚¢‚È‚¢");
 
-            return m_interactObj;
+            return;
         }
 
-        //player.OnInteractSafeProcess();
+        player.ProcessSafe();
 
         //pos 
 
         StartCoroutine(SaveGameData());
 
-        return m_interactObj;
     }
 
     private IEnumerator SaveGameData()

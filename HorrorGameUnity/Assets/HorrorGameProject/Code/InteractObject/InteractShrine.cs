@@ -4,7 +4,7 @@ public class InteractShrine : MonoBehaviour, IInteractable
 {
     private Enum_InteractObj m_interactObj = Enum_InteractObj.Shrine;
 
-    public Enum_InteractObj OnInteract(PlayerController player)
+    public void OnInteract(PlayerController player)
     {
         if(!GameManager.Instance.IsGameStart)
         {
@@ -22,6 +22,5 @@ public class InteractShrine : MonoBehaviour, IInteractable
 
 
 
-        return m_interactObj;
     }
 }

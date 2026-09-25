@@ -14,7 +14,7 @@ public class InteractToStage : MonoBehaviour, IInteractable
     //    m_toStage = toStage;
     //}
 
-    public Enum_InteractObj OnInteract(PlayerController player)
+    public void OnInteract(PlayerController player)
     {
         var currentStage = GameManager.Instance.CurrentStage;
 
@@ -22,6 +22,5 @@ public class InteractToStage : MonoBehaviour, IInteractable
 
         StageManager.Instance.OnStageLoad(m_nextStage, player, position);
 
-        return m_interactObj;
     }
 }

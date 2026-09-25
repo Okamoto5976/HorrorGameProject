@@ -7,7 +7,7 @@ public class EnemyGenerater : MonoBehaviour
 
     [SerializeField] private EnemyPoolMediation m_enemyPoolMediation;
 
-    private List<EnemyController> m_enemyList = new();
+    private List<EnemyBase> m_enemyList = new();
 
     //call Move Scene
     public void GenerateEnemy(Enum_Stage stage)
@@ -39,7 +39,7 @@ public class EnemyGenerater : MonoBehaviour
             //m_enemyPool‚©‚çŒÄ‚Ô
             var obj = m_enemyPoolMediation.GetPoolObject(enemy);
 
-            var enemyObj = obj.GetComponent<EnemyController>();
+            var enemyObj = obj.GetComponent<EnemyBase>();
             m_enemyList.Add(enemyObj);
 
             obj.transform.position = pos.GetSpawnPos();

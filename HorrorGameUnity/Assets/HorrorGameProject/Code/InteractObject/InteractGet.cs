@@ -6,7 +6,7 @@ public class InteractGet : MonoBehaviour, IInteractable
 
     private bool m_isGet;
 
-    public Enum_InteractObj OnInteract(PlayerController player)
+    public void OnInteract(PlayerController player)
     {
         if(GameManager.Instance.IsGameStart)
         {
@@ -28,7 +28,6 @@ public class InteractGet : MonoBehaviour, IInteractable
 
         }
 
-        return m_interactObj;
     }
 
     public void Initialized(bool value)

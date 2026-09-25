@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent (typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     //=========================
     // Component References

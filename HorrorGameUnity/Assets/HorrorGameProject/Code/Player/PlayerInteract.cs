@@ -34,29 +34,29 @@ public class PlayerInteract : MonoBehaviour
 
         if (orderedByProximity[0].TryGetComponent<IInteractable>(out var interactable))
         {
-            var type = interactable.OnInteract(player);
+            interactable.OnInteract(player);
 
-            ChangeState(type);
+            //ChangeState(type);
         }
     }
 
-    private void ChangeState(Enum_InteractObj type)
-    {
-        switch(type)
-        {
-            case Enum_InteractObj.MoveStage:
-                break;
-            case Enum_InteractObj.Safe:
-                m_playerController.ProcessHide();
+    //private void ChangeState(Enum_InteractObj type)
+    //{
+    //    switch(type)
+    //    {
+    //        case Enum_InteractObj.MoveStage:
+    //            break;
+    //        case Enum_InteractObj.Safe:
+    //            m_playerController.ProcessSafe();
 
-                break;
-            case Enum_InteractObj.Hide:
-                m_playerController.ProcessHide();
+    //            break;
+    //        case Enum_InteractObj.Hide:
+    //            m_playerController.ProcessHide();
 
-                break;
-            case Enum_InteractObj.Research:
+    //            break;
+    //        case Enum_InteractObj.Research:
 
-                break;
-        }
-    }
+    //            break;
+    //    }
+    //}
 }

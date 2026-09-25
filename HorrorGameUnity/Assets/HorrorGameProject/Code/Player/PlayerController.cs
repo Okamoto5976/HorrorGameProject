@@ -1,12 +1,12 @@
 using UnityEngine;
 
-[RequireComponent (typeof(PlayerMovement))]
+[RequireComponent (typeof(Movement))]
 [RequireComponent(typeof(PlayerInteract))]
 [RequireComponent(typeof(PlayerStatus))]
 
 public class PlayerController : MonoBehaviour
 {
-    private enum PlayerState
+    public enum PlayerState
     {
         Idle,
         Hide,
@@ -35,13 +35,15 @@ public class PlayerController : MonoBehaviour
         Not
     }
 
-    private PlayerState m_playerState;
+    private PlayerState m_playerState = PlayerState.Idle;
+
+    public PlayerState State => m_playerState;
 
     //================================
     // Component References
     //================================
 
-    private PlayerMovement m_playerMovement;
+    private Movement m_playerMovement;
 
     private PlayerInteract m_playerInteract;
 
@@ -70,7 +72,8 @@ public class PlayerController : MonoBehaviour
 
     //Right = true, Left = false;
     private bool m_resistDir;
-    private float m_resistValue;
+    private EnemyBase m_resistingEnemy;
+   
 
 
     //player runtime
@@ -83,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        m_playerMovement = GetComponent<PlayerMovement>();
+        m_playerMovement = GetComponent<Movement>();
         m_playerInteract = GetComponent<PlayerInteract>();
         m_playerStatus = GetComponent<PlayerStatus>();
         
@@ -120,15 +123,8 @@ public class PlayerController : MonoBehaviour
     {
         m_playerPos.SetValue(transform.position);
 
-        //---Move Control-------------
-
-        if (m_playerState != PlayerState.Safe || m_playerState != PlayerState.Hide || !m_canMove)
-        {
 
 
-            m_playerMovement.Move(m_inputDir);
-
-        }
 
         //Now Player State Rest Process
         if (m_playerState == PlayerState.Safe)
@@ -139,6 +135,54 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        
+    }
+
+    private void FixedUpdate()
+    {
+        //---Move Control-------------
+        MoveControl();
+
+    }
+
+    private void MoveControl()
+    {
+        if(m_playerState == PlayerState.Safe ||
+            m_playerState == PlayerState.Hide ||
+            m_playerState == PlayerState.Resist ||
+            m_playerState == PlayerState.Dead ||
+            !m_canMove)
+        {
+            m_playerMovement.Move(Vector3.zero);
+
+        }
+        else
+        {
+            m_playerMovement.Move(m_inputDir);
+        }
+
+
+
+    }
+
+    private void Resist(Vector2 dir)
+    {
+        if(!m_resistDir)
+        {
+            if(dir.x > 0)
+            {
+                m_playerStatus.AddResistValue(2f);
+                m_resistDir = true;
+            }
+        }
+        else
+        {
+            if(dir.x < 0)
+            {
+                m_playerStatus.AddResistValue(2f);
+                m_resistDir = false;
+            }
+        }
     }
 
     //================================
@@ -196,16 +240,33 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
     //================================
     // Public Methods
     //================================
 
-    public void HitEnemy()
+    public void SuccessResist()
     {
-        m_resistValue = 0;
+        m_resistingEnemy.ResistPlayer();
+
+        ChangeState(PlayerState.Idle);
+    }
+
+
+
+    public void HitEnemy(EnemyBase component)
+    {
+        m_resistingEnemy = component;
+
+        m_playerStatus.ResetResistValue();
 
         ChangeState(PlayerState.Resist);
 
+    }
+
+    public void KillPlayer()
+    {
+        ChangeState(PlayerState.Dead);
     }
 
 
@@ -226,35 +287,6 @@ public class PlayerController : MonoBehaviour
 
    
      
-    private void Resist(Vector2 dir)
-    {
-        if(!m_resistDir)
-        {
-            if(dir.x > 0)
-            {
-
-                m_resistDir = true;
-            }
-        }
-        else
-        {
-            if(dir.x < 0)
-            {
-
-                m_resistDir = false;
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
 
 
 
