@@ -3,10 +3,27 @@ using UnityEngine.UI;
 
 public class PlayerStatus : MonoBehaviour
 {
+    public enum StaminaState
+    {
+        Idle,
+        Move,
+        Run,
+        Resist,
+        Hide,
+        Rest,
+        Safe
+    }
+
+    private StaminaState m_staminaState = StaminaState.Idle;
+
+
     //================================
     // Component References
     //================================
     private PlayerController m_playerController;
+
+    //---runtime---------
+    [SerializeField] private RuntimeFloat m_playerStamina;
 
 
     //----stamina----------------
@@ -18,7 +35,7 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] private Slider m_leftSlider;
     [SerializeField] private Slider m_rightSlider;
 
-    private float m_gaugeVelocity = 0.2f;
+    private float m_gaugeVelocity = 0.1f;
 
 
     //----resist------------------
@@ -66,11 +83,9 @@ public class PlayerStatus : MonoBehaviour
             m_resistValue -= Time.deltaTime * 2f;
         }
 
-       
+        StaminaManager();
 
         UpdateStaminaSlider();
-
-        ConsumptionStamina(1f);
     }
 
     public void ResetResistValue()
@@ -84,6 +99,11 @@ public class PlayerStatus : MonoBehaviour
         m_resistValue += value;
     }
 
+    public void ChangeStaminaState(StaminaState state)
+    {
+        m_staminaState = state;
+    }
+
     private void UpdateStaminaSlider()
     {
         float target = Stamina / m_maxStamina;
@@ -92,13 +112,48 @@ public class PlayerStatus : MonoBehaviour
             m_rightSlider.value,
             target,
             ref m_gaugeVelocity,
-            1f);
+            0.5f);
 
         m_leftSlider.value = Mathf.SmoothDamp(
             m_leftSlider.value,
             target,
             ref m_gaugeVelocity,
-            1f);
+            0.5f);
+    }
+
+    private void StaminaManager()
+    {
+        if(m_staminaState == StaminaState.Idle)
+        {
+            RecoverStamina(1f);
+        }
+        else if(m_staminaState == StaminaState.Move)
+        {
+            ConsumptionStamina(1f);
+        }
+        else if (m_staminaState == StaminaState.Run)
+        {
+            ConsumptionStamina(2f);
+        }
+        else if (m_staminaState == StaminaState.Rest)
+        {
+            RecoverStamina(2f);
+        }
+        else if (m_staminaState == StaminaState.Safe)
+        {
+            RecoverStamina(4f);
+        }
+    }
+
+    public bool ResistStamina(float value)
+    {
+        if(m_stamina >= value)
+        {
+            m_stamina -= value;
+            return true;
+        }
+
+        return false;
     }
 
     private void ConsumptionStamina(float multiply)
@@ -126,4 +181,6 @@ public class PlayerStatus : MonoBehaviour
 
         m_staminaTime += Time.deltaTime;
     }
+
+    
 }

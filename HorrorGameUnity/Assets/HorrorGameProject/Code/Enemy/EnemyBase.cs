@@ -25,10 +25,7 @@ public class EnemyBase : MonoBehaviour
 
     private ReturnPool m_returnPool;
 
-    //[SerializeField] private float m_checkDistance;
 
-    ////get playerPos
-    //[SerializeField] private Vector3Asset m_playerPos;
 
     [SerializeField] private bool m_isResistEnable;
 
@@ -46,22 +43,6 @@ public class EnemyBase : MonoBehaviour
     {
         ChangeState(EnemyState.Disable);
     }
-    //private bool CheckPlayerPos()
-    //{
-    //    return (Vector3.Distance(transform.position, m_playerPos.Value) <= m_checkDistance);
-    //}
-
-    //private void OnMoveDir()
-    //{
-    //    if(m_playerPos.Value.x < transform.position.x)
-    //    {
-    //        //m_moveInput.x = -1f;
-    //    }
-    //    else
-    //    {
-    //        //m_moveInput.x = 1f;
-    //    }
-    //}
 
     private void ChangeState(EnemyState state)
     {
@@ -109,4 +90,5 @@ public class EnemyBase : MonoBehaviour
 
 
     }
+
 }

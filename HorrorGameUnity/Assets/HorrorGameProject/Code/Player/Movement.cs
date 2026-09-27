@@ -23,4 +23,10 @@ public class Movement : MonoBehaviour
         m_rb.linearVelocity = new Vector3(dir.x * speed, m_rb.linearVelocity.y);
     }
 
+    public void Run(Vector3 dir)
+    {
+        m_rb.linearVelocity = new Vector3(dir.x * speed * 1.5f, m_rb.linearVelocity.y);
+
+    }
+
 }

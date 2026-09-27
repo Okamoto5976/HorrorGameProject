@@ -16,16 +16,7 @@ public class PlayerController : MonoBehaviour
         Dead,
     }
 
-    private enum StaminaState
-    { 
-        Idle,
-        Move,
-        Run,
-        Resist,
-        Hide,
-        Rest,
-        Safe
-    }
+  
 
 
     //State‚ª•’Ê‚ÌŽž‚É‚à@Interact‚ª‚Å‚«‚È‚¢Žž‚ª‚ ‚é‚©‚ç
@@ -35,9 +26,8 @@ public class PlayerController : MonoBehaviour
         Not
     }
 
-    private PlayerState m_playerState = PlayerState.Idle;
+    public PlayerState State { get; private set; } = PlayerState.Idle;
 
-    public PlayerState State => m_playerState;
 
     //================================
     // Component References
@@ -78,6 +68,8 @@ public class PlayerController : MonoBehaviour
 
     //player runtime
     [SerializeField] private Vector3Asset m_playerPos;
+
+    [SerializeField] private Vector3Asset m_playerFacingDir;
 
 
     //================================
@@ -127,7 +119,7 @@ public class PlayerController : MonoBehaviour
 
 
         //Now Player State Rest Process
-        if (m_playerState == PlayerState.Safe)
+        if (State == PlayerState.Safe)
         {
             //player rest in jizo area, so player cann't move
             //RecoverStamina(5f);
@@ -147,30 +139,57 @@ public class PlayerController : MonoBehaviour
 
     private void MoveControl()
     {
-        if(m_playerState == PlayerState.Safe ||
-            m_playerState == PlayerState.Hide ||
-            m_playerState == PlayerState.Resist ||
-            m_playerState == PlayerState.Dead ||
+        if(State == PlayerState.Safe ||
+            State == PlayerState.Rest ||
+            State == PlayerState.Hide ||
+            State == PlayerState.Resist ||
+            State == PlayerState.Dead ||
             !m_canMove)
         {
             m_playerMovement.Move(Vector3.zero);
+            return;
+        }
 
+        if(m_inputDir != Vector2.zero)
+        {
+            if(m_inputDir.x > 0f)
+            {
+                m_playerFacingDir.SetValue(Vector3.right);
+            }
+            else
+            {
+                m_playerFacingDir.SetValue(Vector3.left);
+
+            }
+        }
+
+        if (m_inputDir == Vector2.zero)
+        {
+            m_playerMovement.Move(Vector3.zero);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
+        }
+        else if (m_isRun)
+        {
+            m_playerMovement.Run(m_inputDir);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Run);
         }
         else
         {
             m_playerMovement.Move(m_inputDir);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Move);
         }
-
-
-
     }
 
     private void Resist(Vector2 dir)
     {
-        if(!m_resistDir)
+
+
+        if (!m_resistDir)
         {
             if(dir.x > 0)
             {
+                if (!m_playerStatus.ResistStamina(5f)) return;
+
                 m_playerStatus.AddResistValue(2f);
                 m_resistDir = true;
             }
@@ -179,6 +198,8 @@ public class PlayerController : MonoBehaviour
         {
             if(dir.x < 0)
             {
+                if (!m_playerStatus.ResistStamina(5f)) return;
+
                 m_playerStatus.AddResistValue(2f);
                 m_resistDir = false;
             }
@@ -195,7 +216,7 @@ public class PlayerController : MonoBehaviour
         //State is Dead => return;
 
         //State is Resist => A/D˜A‘Å
-        if(m_playerState == PlayerState.Resist)
+        if(State == PlayerState.Resist)
         {
             Resist(dir);
             return;
@@ -214,6 +235,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnInputRest()
     {
+        if(State != PlayerState.Rest)
+        {
+            ChangeState(PlayerState.Rest);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Rest);
+        }
+        else
+        {
+            ChangeState(PlayerState.Idle);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
+        }
 
     }
 
@@ -250,6 +281,8 @@ public class PlayerController : MonoBehaviour
         m_resistingEnemy.ResistPlayer();
 
         ChangeState(PlayerState.Idle);
+        m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
+
     }
 
 
@@ -261,6 +294,7 @@ public class PlayerController : MonoBehaviour
         m_playerStatus.ResetResistValue();
 
         ChangeState(PlayerState.Resist);
+        m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Resist);
 
     }
 
@@ -276,9 +310,9 @@ public class PlayerController : MonoBehaviour
 
     private void ChangeState(PlayerState state)
     {
-        if(m_playerState == state) return;
+        if(State == state) return;
 
-        m_playerState = state;
+        State = state;
     }
 
     
@@ -295,27 +329,32 @@ public class PlayerController : MonoBehaviour
     {
 
         //Debug.Log("SafeProcess");
-        if(m_playerState != PlayerState.Safe)
+        if(State != PlayerState.Safe)
         {
             ChangeState(PlayerState.Safe);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Safe);
 
         }
         else
         {
             ChangeState(PlayerState.Idle);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
         }
     }
 
     public void ProcessHide()
     {
-        if (m_playerState != PlayerState.Hide)
+        if (State != PlayerState.Hide)
         {
             ChangeState(PlayerState.Hide);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Hide);
 
         }
         else
         {
             ChangeState(PlayerState.Idle);
+            m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
+
         }
     }
     //------------------------------------------------------------------
