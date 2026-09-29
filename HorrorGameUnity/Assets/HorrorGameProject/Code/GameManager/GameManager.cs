@@ -29,6 +29,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float m_gameTimer = 120f;
     public float GameTimer => m_gameTimer;
 
+    [SerializeField] private float m_globalAlert;
+    public float GlobalAlert => m_globalAlert;
+
     private bool m_isGameStart = false;
 
     public bool IsGameStart => m_isGameStart;
@@ -47,6 +50,8 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
+
+        CalculationAlert(-0.5f * Time.deltaTime);
     }
 
     private void CountTimer()
@@ -65,6 +70,12 @@ public class GameManager : MonoBehaviour
     public void AddCollect()
     {
         m_collectHead++;
+    }
+
+    public void CalculationAlert(float value)
+    {
+        m_globalAlert += value;
+        m_globalAlert = Mathf.Clamp(m_globalAlert, 0f, 100f);
     }
 
     public bool CheckCollict()

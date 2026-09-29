@@ -170,6 +170,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (m_isRun)
         {
+            if (m_playerStatus.Stamina <= 0f) return;
+
             m_playerMovement.Run(m_inputDir);
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Run);
         }

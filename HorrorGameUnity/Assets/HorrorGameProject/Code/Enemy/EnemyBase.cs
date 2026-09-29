@@ -29,7 +29,8 @@ public class EnemyBase : MonoBehaviour
 
     [SerializeField] private bool m_isResistEnable;
 
-    private bool m_isHitCollider = true;
+
+    //private bool m_isHitCollider = true;
 
 
     private void Awake()
@@ -37,14 +38,19 @@ public class EnemyBase : MonoBehaviour
         m_returnPool = GetComponent<ReturnPool>();
     }
 
-    public void SetIsHitCollider(bool value) => m_isHitCollider = value;
+    private void OnEnable()
+    {
+        ChangeState(EnemyState.Idle);
+    }
+
+    //public void SetIsHitCollider(bool value) => m_isHitCollider = value;
 
     public void ResistPlayer()
     {
         ChangeState(EnemyState.Disable);
     }
 
-    private void ChangeState(EnemyState state)
+    public void ChangeState(EnemyState state)
     {
         if (m_state == state) return;
 
@@ -59,7 +65,7 @@ public class EnemyBase : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (!m_isHitCollider) return;
+        //if (!m_isHitCollider) return;
 
         if (m_state == EnemyState.Disable) return;
         if (m_state == EnemyState.Attack) return;
