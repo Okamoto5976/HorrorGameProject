@@ -11,6 +11,7 @@ public class EnemyBase : MonoBehaviour
     public enum EnemyState
     {
         Idle,
+        Stay,//“–‚½‚è”»’è‚È‚µ@s“®‚·‚é
         Attack,
         Disable
     }
@@ -18,6 +19,8 @@ public class EnemyBase : MonoBehaviour
     private EnemyState m_state = EnemyState.Idle;
 
     public EnemyState State => m_state;
+
+    [SerializeField] private EnemyState m_defaultState;
 
     //================================
     // Component References
@@ -40,7 +43,7 @@ public class EnemyBase : MonoBehaviour
 
     private void OnEnable()
     {
-        ChangeState(EnemyState.Idle);
+        ChangeState(m_defaultState);
     }
 
     //public void SetIsHitCollider(bool value) => m_isHitCollider = value;
@@ -48,6 +51,14 @@ public class EnemyBase : MonoBehaviour
     public void ResistPlayer()
     {
         ChangeState(EnemyState.Disable);
+
+        Invoke(nameof(RecoverfromDisable), 3f);
+    }
+
+    private void RecoverfromDisable()
+    {
+        ChangeState(m_defaultState);
+        Debug.Log("DefaultState");
     }
 
     public void ChangeState(EnemyState state)
@@ -62,11 +73,12 @@ public class EnemyBase : MonoBehaviour
         m_returnPool.CallReturnPool();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
 
         //if (!m_isHitCollider) return;
 
+        if (m_state == EnemyState.Stay) return;
         if (m_state == EnemyState.Disable) return;
         if (m_state == EnemyState.Attack) return;
 

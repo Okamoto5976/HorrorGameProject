@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour
         {
             if(dir.x > 0)
             {
-                if (!m_playerStatus.ResistStamina(5f)) return;
+                if (!m_playerStatus.ResistStamina(2f)) return;
 
                 m_playerStatus.AddResistValue(2f);
                 m_resistDir = true;
@@ -200,7 +200,7 @@ public class PlayerController : MonoBehaviour
         {
             if(dir.x < 0)
             {
-                if (!m_playerStatus.ResistStamina(5f)) return;
+                if (!m_playerStatus.ResistStamina(2f)) return;
 
                 m_playerStatus.AddResistValue(2f);
                 m_resistDir = false;

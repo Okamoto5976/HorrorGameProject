@@ -123,7 +123,8 @@ public class PlayerStatus : MonoBehaviour
 
     private void StaminaManager()
     {
-        if(m_staminaState == StaminaState.Idle)
+        if(m_staminaState == StaminaState.Idle||
+            m_staminaState == StaminaState.Resist)
         {
             RecoverStamina(1f);
         }

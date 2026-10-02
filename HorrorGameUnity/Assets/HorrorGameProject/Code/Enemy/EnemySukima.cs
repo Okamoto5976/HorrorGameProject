@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 [RequireComponent (typeof(EnemyBase))]
@@ -61,6 +60,9 @@ public class EnemySukima : MonoBehaviour
     [SerializeField] private float m_checkDiscoveryDistance;
     public float CheckDis => m_checkDiscoveryDistance;
 
+    [SerializeField] private float m_checkAttackDistance;
+    public float AttackDis => m_checkAttackDistance;
+
     private Action m_previousAction = Action.Idle;
 
     private Coroutine m_isAction;
@@ -112,14 +114,14 @@ public class EnemySukima : MonoBehaviour
 
     private void UpdateFlag()
     {
-
+        m_coolTimer -= Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
         if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable ||
-            IsCoolTime)
+            m_enemyBase.State == EnemyBase.EnemyState.Disable
+            )
         {
             return;
         }
@@ -150,6 +152,11 @@ public class EnemySukima : MonoBehaviour
         //Šî‘b’l
         m_evaluateIdleValue = 20;
 
+        if(IsCoolTime)
+        {
+            m_evaluateIdleValue += 60;
+        }
+
         var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Idle);
 
         action.m_value = m_evaluateIdleValue;
@@ -160,7 +167,7 @@ public class EnemySukima : MonoBehaviour
         //Šî‘b’l
         m_evaluateWaitValue = 10;
 
-        if(m_sqrDistance <= CheckDis * CheckDis * 2f)
+        if(m_sqrDistance <= CheckDis * CheckDis)
         {
             m_evaluateWaitValue += 20;
         }
@@ -186,7 +193,7 @@ public class EnemySukima : MonoBehaviour
 
         }
 
-        if (m_sqrDistance <= CheckDis * CheckDis * 2f)
+        if (m_sqrDistance <= CheckDis * CheckDis)
         {
             m_evaluateWaitValue += 10;
         }
@@ -248,7 +255,7 @@ public class EnemySukima : MonoBehaviour
                 break;
 
             case Action.Wait:
-                m_isAction = StartCoroutine(ExecuteChase());
+                m_isAction = StartCoroutine(ExecuteWait());
                 break;
 
             case Action.Feint:
@@ -261,19 +268,23 @@ public class EnemySukima : MonoBehaviour
 
     private void ExecuteIdle()
     {
-       
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
     }
 
-    private IEnumerator ExecuteChase()
+    private IEnumerator ExecuteWait()
     {
+
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
 
         //anim.idle
         float startTime = Time.time;
         float timeout = 10f;
         while (true)
         {
-            if (m_sqrDistance <= CheckDis * CheckDis * 2f)
+            if (m_sqrDistance <= AttackDis * AttackDis)
             {
+                Debug.Log("Attack");
+
                 //anim.attack
 
                 yield return new WaitForSeconds(2f);
@@ -299,13 +310,17 @@ public class EnemySukima : MonoBehaviour
 
     private IEnumerator ExecuteFeint()
     {
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+
         //anim.idle
         float startTime = Time.time;
         float timeout = 10f;
         while (true)
         {
-            if (m_sqrDistance <= CheckDis * CheckDis * 2f)
+            if (m_sqrDistance <= AttackDis * AttackDis)
             {
+                Debug.Log("Attack");
+
                 //anim.attack
 
                 yield return new WaitForSeconds(2f);
