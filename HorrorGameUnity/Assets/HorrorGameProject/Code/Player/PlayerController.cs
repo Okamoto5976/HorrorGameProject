@@ -71,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Vector3Asset m_playerFacingDir;
 
+    [SerializeField] private RuntimeBool m_isMove;
 
     //================================
     // Unity Methods
@@ -147,6 +148,8 @@ public class PlayerController : MonoBehaviour
             !m_canMove)
         {
             m_playerMovement.Move(Vector3.zero);
+            m_isMove.SetValue(false);
+
             return;
         }
 
@@ -167,6 +170,8 @@ public class PlayerController : MonoBehaviour
         {
             m_playerMovement.Move(Vector3.zero);
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
+
+            m_isMove.SetValue(false);
         }
         else if (m_isRun)
         {
@@ -174,11 +179,17 @@ public class PlayerController : MonoBehaviour
 
             m_playerMovement.Run(m_inputDir);
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Run);
+
+            m_isMove.SetValue(true);
+
         }
         else
         {
             m_playerMovement.Move(m_inputDir);
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Move);
+
+            m_isMove.SetValue(true);
+
         }
     }
 
@@ -303,6 +314,11 @@ public class PlayerController : MonoBehaviour
     public void KillPlayer()
     {
         ChangeState(PlayerState.Dead);
+    }
+
+    public void SurpriseMap()
+    {
+        OnInputMap();
     }
 
 

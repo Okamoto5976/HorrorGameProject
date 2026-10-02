@@ -157,6 +157,13 @@ public class PlayerStatus : MonoBehaviour
         return false;
     }
 
+    public void DeleteStamina(float value)
+    {
+        m_stamina -= value;
+
+        m_stamina = Mathf.Max(m_stamina, 0f);
+    }
+
     private void ConsumptionStamina(float multiply)
     {
 
