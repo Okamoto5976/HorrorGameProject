@@ -7,7 +7,7 @@ public class EnemyGenerater : MonoBehaviour
 
     [SerializeField] private EnemyPoolMediation m_enemyPoolMediation;
 
-    private List<EnemyBase> m_enemyList = new();
+    private List<ReturnPool> m_enemyList = new();
 
     //call Move Scene
     public void GenerateEnemy(Enum_Stage stage)
@@ -19,7 +19,7 @@ public class EnemyGenerater : MonoBehaviour
         //存在する敵をPoolに戻す
         for(int e = 0; e < m_enemyList.Count; e++)
         {
-            m_enemyList[e].ReturnPool();
+            m_enemyList[e].CallReturnPool();
         }
 
         //そのステージにいる敵のListをGet
@@ -39,7 +39,7 @@ public class EnemyGenerater : MonoBehaviour
             //m_enemyPoolから呼ぶ
             var obj = m_enemyPoolMediation.GetPoolObject(enemy);
 
-            var enemyObj = obj.GetComponent<EnemyBase>();
+            var enemyObj = obj.GetComponent<ReturnPool>();
             m_enemyList.Add(enemyObj);
 
             obj.transform.position = pos.GetSpawnPos();

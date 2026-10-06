@@ -16,8 +16,9 @@ public class EnemyPeta : MonoBehaviour
     public enum Action
     {
         Idle,//
-        Wait,//見てわかる予備動作　近づくと掴み
-        Feint,//距離で急に掴みに入る
+        Move,//
+        Wait,//
+        Attack//
     }
 
     //================================
@@ -56,7 +57,7 @@ public class EnemyPeta : MonoBehaviour
     private float m_sqrDistance => (m_playerPos.Value - transform.position).sqrMagnitude;
 
     //ToPlayer
-    //private Vector3 m_toPlayer => m_playerPos.Value - transform.position;
+    private Vector3 m_toPlayer => m_playerPos.Value - transform.position;
 
     //==============================
     //Flag
@@ -71,6 +72,28 @@ public class EnemyPeta : MonoBehaviour
     private Action m_previousAction = Action.Idle;
 
     private Coroutine m_isAction;
+
+    //----------Active flag-----------------------------
+    private bool m_isActive;
+
+    private bool m_isTouched;
+    [SerializeField] private float m_activeTimer;
+    private float m_timer;
+    [SerializeField] private float m_activeRange;
+    //---------------------------------------------------
+
+    private bool m_isAttack = false;
+
+    private bool m_canAttack;//動き出してからできるようになるまで
+
+    private bool m_disable = false;
+
+    private float m_canAttackTimer;
+    [SerializeField] private float m_canAttackTimeValue;
+
+    private float m_moveTimer;
+
+    private Vector3 m_velocity;
 
     //coolTime
     private float m_coolTimer;
@@ -100,12 +123,17 @@ public class EnemyPeta : MonoBehaviour
     {
         m_actionCalculateList = new List<ActionCalculate>();
         m_actionCalculateList.Add(new ActionCalculate(Action.Idle));
+        m_actionCalculateList.Add(new ActionCalculate(Action.Move));
         m_actionCalculateList.Add(new ActionCalculate(Action.Wait));
-        m_actionCalculateList.Add(new ActionCalculate(Action.Feint));
+        m_actionCalculateList.Add(new ActionCalculate(Action.Attack));
     }
 
     private void Update()
     {
+        ActiveFlag();
+
+        if (!m_isActive) return;
+
         UpdateFlag();
 
         UpdateEvaluation();
@@ -119,7 +147,60 @@ public class EnemyPeta : MonoBehaviour
 
     private void UpdateFlag()
     {
-        m_coolTimer -= Time.deltaTime;
+        if(m_canAttackTimer < m_canAttackTimeValue)
+        {
+            m_canAttackTimer += Time.deltaTime;
+
+            if (m_canAttackTimer >= m_canAttackTimeValue)
+            {
+                m_canAttack = true;
+                
+            }
+        }
+
+        m_moveTimer += Time.deltaTime;
+       
+
+        //canattack is ture + Petaの座標より前なとき　こっちを向いたら　攻撃isAttack True
+        if(!m_disable && (m_playerFacingDir.Value.x * m_velocity.x) < 0f)
+        {
+            m_isAttack = true;
+        }
+
+        //もしPlayerより前に行ったら終了
+        //あとはDisableにして　音をPlayerの座標の前にしておく
+        if (m_velocity.x > 0f)
+        {
+            if(m_playerPos.Value.x - transform.position.x < 0f)
+            {
+                m_disable = true;
+            }
+        }
+        else if(m_velocity.x < 0f)
+        {
+            if(m_playerPos.Value.x - transform.position.x > 0f)
+            {
+                m_disable = true;
+            }
+        }
+        
+    }
+
+    private void ActiveFlag()
+    {
+        if (m_isActive) return;
+
+        if (!m_isTouched) return;
+
+        m_timer += Time.deltaTime;
+
+        if (m_timer > m_activeTimer && m_sqrDistance < m_activeRange * m_activeRange)
+        {
+            m_isActive = true;
+
+            //向きを固定
+            m_velocity = m_toPlayer;
+        }
     }
 
     private void FixedUpdate()
@@ -140,72 +221,77 @@ public class EnemyPeta : MonoBehaviour
     //==============================
 
     private float m_evaluateIdleValue;
+    private float m_evaluateMoveValue;
     private float m_evaluateWaitValue;
-    private float m_evaluateFeintValue;
+    private float m_evaluateAttackValue;
 
     private float m_globalAlert => GameManager.Instance.GlobalAlert;
 
     private void UpdateEvaluation()
     {
         EvaluateIdle();
+        EvaluateMove();
         EvaluateWait();
-        EvaluateFeint();
+        EvaluateAttack();
     }
 
     private void EvaluateIdle()
     {
         //基礎値
-        m_evaluateIdleValue = 20;
-
-        if(IsCoolTime)
-        {
-            m_evaluateIdleValue += 60;
-        }
+        m_evaluateIdleValue = 20f;
 
         var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Idle);
 
         action.m_value = m_evaluateIdleValue;
     }
+    private void EvaluateMove()
+    {
+        m_evaluateMoveValue = 10f;
+
+        if(m_canAttack)
+        {
+            m_evaluateMoveValue = 20f;
+        }
+
+        var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Move);
+
+        action.m_value = m_evaluateMoveValue;
+    }
 
     private void EvaluateWait()
     {
         //基礎値
-        m_evaluateWaitValue = 10;
+        m_evaluateWaitValue = 10f;
 
-        if(m_sqrDistance <= CheckDis * CheckDis)
+        if(m_globalAlert > 60f)
         {
-            m_evaluateWaitValue += 20;
+            //m_evaluateWaitValue = 30f;
         }
+
+        if(m_moveTimer > 5 && 10 < m_moveTimer)
+        {
+
+        }
+        //時間を設けて　それが５～１０なら
+        // value * timeで　時間ごとに増える値
 
         var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Wait);
 
         action.m_value = m_evaluateWaitValue;
     }
 
-
-    private void EvaluateFeint()
+    private void EvaluateAttack()
     {
-        //基礎値
-        m_evaluateFeintValue = 10;
+        m_evaluateAttackValue = 10f;
 
-        if (m_globalAlert >= 70f)
+        if(m_isAttack)
         {
-            m_evaluateFeintValue += 20;
-        }
-        else if(m_globalAlert >= 40f)
-        {
-            m_evaluateFeintValue += 10;
-
+            m_evaluateAttackValue = 60f;
         }
 
-        if (m_sqrDistance <= CheckDis * CheckDis)
-        {
-            m_evaluateWaitValue += 10;
-        }
+        var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Attack);
 
-        var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Feint);
-
-        action.m_value = m_evaluateFeintValue;
+        action.m_value = m_evaluateAttackValue;
     }
 
     //==============================
@@ -259,12 +345,16 @@ public class EnemyPeta : MonoBehaviour
                 ExecuteIdle();
                 break;
 
-            case Action.Wait:
-                m_isAction = StartCoroutine(ExecuteWait());
+            case Action.Move:
+                ExecuteMove();
                 break;
 
-            case Action.Feint:
-                m_isAction = StartCoroutine(ExecuteFeint());
+            case Action.Wait:
+                ExecuteWait();
+                break;
+
+            case Action.Attack:
+                ExecuteAttack();
                 break;
         }
 
@@ -276,78 +366,30 @@ public class EnemyPeta : MonoBehaviour
         m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
     }
 
-    private IEnumerator ExecuteWait()
+    private void ExecuteMove()
     {
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
 
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
-
-        //anim.idle
-        float startTime = Time.time;
-        float timeout = 10f;
-        while (true)
-        {
-            if (m_sqrDistance <= AttackDis * AttackDis)
-            {
-                Debug.Log("Attack");
-
-                //anim.attack
-
-                yield return new WaitForSeconds(2f);
-
-                m_coolTimer = Random.Range(3f, 6f);
-
-                break;
-            }
-
-            //タイムアウト時　もう一回判断
-            if (Time.time - startTime >= timeout)
-            {
-                m_coolTimer = 0f;
-                break;
-            }
-
-            yield return null;
-        }
-
-
-        m_isAction = null;
+        m_movement.Move(m_velocity);
     }
 
-    private IEnumerator ExecuteFeint()
+    private void ExecuteWait()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
 
-        //anim.idle
-        float startTime = Time.time;
-        float timeout = 10f;
-        while (true)
-        {
-            if (m_sqrDistance <= AttackDis * AttackDis)
-            {
-                Debug.Log("Attack");
+    }
 
-                //anim.attack
+    private void ExecuteAttack()
+    {
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Attack);
 
-                yield return new WaitForSeconds(2f);
+    }
 
-                m_coolTimer = Random.Range(6f, 12f);
-
-                break;
-            }
-
-            //タイムアウト時　もう一回判断
-            if (Time.time - startTime >= timeout)
-            {
-                m_coolTimer = 0f;
-                break;
-            }
-
-            yield return null;
-        }
-
-        
-
-        m_isAction = null;
+    private void OnTriggerEnter(Collider other)
+    {
+        //接触　接触オン
+        //+ 時間経過で　Activeオン
+        m_isTouched = true;
     }
 
 }

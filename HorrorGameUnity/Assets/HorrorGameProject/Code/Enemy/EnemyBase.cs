@@ -68,10 +68,10 @@ public class EnemyBase : MonoBehaviour
         m_state = state;
     }
 
-    public void ReturnPool()
-    {
-        m_returnPool.CallReturnPool();
-    }
+    //public void ReturnPool()
+    //{
+    //    m_returnPool.CallReturnPool();
+    //}
 
     private void OnTriggerStay(Collider other)
     {

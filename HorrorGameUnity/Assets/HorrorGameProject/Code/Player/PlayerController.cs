@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent (typeof(Movement))]
 [RequireComponent(typeof(PlayerInteract))]
 [RequireComponent(typeof(PlayerStatus))]
+[RequireComponent(typeof(PlayerObari))]
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class PlayerController : MonoBehaviour
     private PlayerInteract m_playerInteract;
 
     private PlayerStatus m_playerStatus;
+
+    private PlayerObari m_playerObri;
 
     [SerializeField] private PlayerCanvas m_playerCanvas;
 
@@ -82,6 +85,7 @@ public class PlayerController : MonoBehaviour
         m_playerMovement = GetComponent<Movement>();
         m_playerInteract = GetComponent<PlayerInteract>();
         m_playerStatus = GetComponent<PlayerStatus>();
+        m_playerObri = GetComponent<PlayerObari>();
         
         m_input = new();
 
@@ -350,6 +354,7 @@ public class PlayerController : MonoBehaviour
         if(State != PlayerState.Safe)
         {
             ChangeState(PlayerState.Safe);
+            m_playerObri.Release();
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Safe);
 
         }
@@ -374,6 +379,11 @@ public class PlayerController : MonoBehaviour
             m_playerStatus.ChangeStaminaState(PlayerStatus.StaminaState.Idle);
 
         }
+    }
+
+    public void SetObri()
+    {
+        m_playerObri.ActivationObri();
     }
     //------------------------------------------------------------------
 
