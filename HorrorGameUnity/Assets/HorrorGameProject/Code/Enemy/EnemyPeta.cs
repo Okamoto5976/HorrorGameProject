@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemyPeta : MonoBehaviour
+public class EnemyPeta : EnemyBase
 {
     //まずは待機　Playerがコライダー接触かつ離れたら
     //Move　動いてしばらくはIsAttackは　ナシ
@@ -26,7 +25,6 @@ public class EnemyPeta : MonoBehaviour
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -115,7 +113,6 @@ public class EnemyPeta : MonoBehaviour
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -127,6 +124,11 @@ public class EnemyPeta : MonoBehaviour
         m_actionCalculateList.Add(new ActionCalculate(Action.Move));
         m_actionCalculateList.Add(new ActionCalculate(Action.Wait));
         m_actionCalculateList.Add(new ActionCalculate(Action.Attack));
+    }
+
+    protected override void Init()
+    {
+        
     }
 
     private void Update()
@@ -217,8 +219,8 @@ public class EnemyPeta : MonoBehaviour
     private void FixedUpdate()
     {
         if(m_disable ||
-            m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable
+            m_state == EnemyState.Attack ||
+            m_state == EnemyState.Disable
             )
         {
             m_movement.Move(Vector3.zero);
@@ -379,25 +381,25 @@ public class EnemyPeta : MonoBehaviour
 
     private void ExecuteIdle()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
+        ChangeState(EnemyState.Stay);
     }
 
     private void ExecuteMove()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
+        ChangeState(EnemyState.Stay);
 
         m_movement.Move(m_velocity);
     }
 
     private void ExecuteWait()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
+        ChangeState(EnemyState.Stay);
 
     }
 
     private void ExecuteAttack()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        ChangeState(EnemyState.Idle);
 
         m_movement.Move(m_toPlayer.normalized);
     }

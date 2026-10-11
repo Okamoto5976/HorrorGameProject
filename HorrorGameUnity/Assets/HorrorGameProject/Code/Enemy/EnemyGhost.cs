@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemyGhost : MonoBehaviour
+public class EnemyGhost : EnemyBase
 {
     //“®‚«•û‚ÉŠÉ‹}‚ğ‚Â‚¯‚é
     //–Ú“I@i˜H‚Ì–WŠQ
@@ -25,7 +24,6 @@ public class EnemyGhost : MonoBehaviour
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -92,7 +90,6 @@ public class EnemyGhost : MonoBehaviour
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -111,6 +108,12 @@ public class EnemyGhost : MonoBehaviour
         //‰Šú‰EŒü‚«
         m_facingDir = Vector3.right;
     }
+
+    protected override void Init()
+    {
+        
+    }
+
 
     private void Update()
     {
@@ -149,9 +152,7 @@ public class EnemyGhost : MonoBehaviour
             if(m_spiritTimer < 0f)
             {
                 m_spiritTimer += Time.deltaTime;
-
             }
-
         }
         else
         {
@@ -160,16 +161,12 @@ public class EnemyGhost : MonoBehaviour
 
         }
 
-        
-
-        
-
     }
 
     private void FixedUpdate()
     {
-        if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable)
+        if(m_state == EnemyState.Attack ||
+            m_state == EnemyState.Disable)
         {
             m_movement.Move(Vector3.zero);
             return;
@@ -404,7 +401,7 @@ public class EnemyGhost : MonoBehaviour
         if(m_spiritTimer < -20f)
         {
             m_spiritTimer = Random.Range(3f, 12f);
-            m_enemyBase.ChangeState(EnemyBase.EnemyState.Disable);
+            ChangeState(EnemyState.Disable);
             Invoke(nameof(StateIdle), m_spiritTimer);
             return;
         }
@@ -414,7 +411,7 @@ public class EnemyGhost : MonoBehaviour
 
     private void StateIdle()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        ChangeState(EnemyState.Idle);
     }
 
     private void ExecuteChase()

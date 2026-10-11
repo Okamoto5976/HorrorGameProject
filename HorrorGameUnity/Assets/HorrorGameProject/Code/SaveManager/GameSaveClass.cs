@@ -8,6 +8,10 @@ public class GameSaveData
     //ロードで　自動的にステージListができる
     //EnemyPleceDataをロード
     //その後info
+    //PlacementData ( 神社）の場所
+    //Event
+    //CurrentStageをロード
+    //先にPlayerの座標　そのご　敵の生成
 
     //EventがActiveかIsEvent（発動済み）か
 

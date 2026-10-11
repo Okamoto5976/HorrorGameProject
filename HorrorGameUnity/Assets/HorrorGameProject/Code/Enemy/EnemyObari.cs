@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class EnemyObari : MonoBehaviour
+public class EnemyObari : EnemyBase
 {
     [SerializeField] private TMP_Text m_debugText;
     //”­“®ğŒ
@@ -19,6 +19,11 @@ public class EnemyObari : MonoBehaviour
     //Player‚ÉV‚µ‚­Class‚ğ‚½‚¹‚éH
     //Timer‚ÍPlayer‚Ì‚Ù‚¤‚Å
     //
+    protected override void Init()
+    {
+        
+    }
+
     private void Update()
     {
         m_debugText.text = $"{gameObject.name}";

@@ -2420,7 +2420,6 @@ GameObject:
   m_Component:
   - component: {fileID: 849195219}
   - component: {fileID: 849195218}
-  - component: {fileID: 849195217}
   - component: {fileID: 849195216}
   - component: {fileID: 849195215}
   - component: {fileID: 849195214}
@@ -2484,23 +2483,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   speed: 0
---- !u!114 &849195217
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849195213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78bfceff8106d440b38ca4947f28bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  m_playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  m_defaultState: 1
-  m_isResistEnable: 0
 --- !u!114 &849195218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2513,6 +2495,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21eddd87e0218cb49a6852f631f9fd14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMimic
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}
@@ -2567,7 +2554,6 @@ GameObject:
   m_Component:
   - component: {fileID: 866994709}
   - component: {fileID: 866994708}
-  - component: {fileID: 866994707}
   - component: {fileID: 866994706}
   - component: {fileID: 866994705}
   - component: {fileID: 866994704}
@@ -2630,23 +2616,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   speed: 3
---- !u!114 &866994707
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 866994703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78bfceff8106d440b38ca4947f28bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  m_playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  m_defaultState: 1
-  m_isResistEnable: 1
 --- !u!114 &866994708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2659,6 +2628,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23dcd6506f99b2e40854eb13990619b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPeta
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}
@@ -2714,6 +2688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d6f405896227be4e802b096c090a2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  m_enemyManager: {fileID: 0}
   m_clearCount: 4
   m_gameTimer: 120
   m_globalAlert: 0
@@ -3610,6 +3585,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f622dab18c948734a9e12d53e3db0139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyObari
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_debugText: {fileID: 654614177}
 --- !u!1 &1311087784
 GameObject:
@@ -4450,6 +4430,7 @@ MonoBehaviour:
   m_enemyData:
   - {fileID: 11400000, guid: 18235fd44b40d444ab147c95500b3078, type: 2}
   m_setStagePlacement: 0000000001000000
+  m_enemyGenerateData: {fileID: 0}
 --- !u!4 &1570611072
 Transform:
   m_ObjectHideFlags: 0
@@ -4681,7 +4662,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1748374130}
   - component: {fileID: 1748374129}
-  - component: {fileID: 1748374128}
   - component: {fileID: 1748374127}
   - component: {fileID: 1748374126}
   - component: {fileID: 1748374125}
@@ -4744,23 +4724,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   speed: 5
---- !u!114 &1748374128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748374124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78bfceff8106d440b38ca4947f28bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  m_playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  m_defaultState: 1
-  m_isResistEnable: 0
 --- !u!114 &1748374129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4773,6 +4736,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 816cace795a66e84f97f93f8605759e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDaidara
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}
@@ -5230,7 +5198,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2007215664}
   - component: {fileID: 2007215663}
-  - component: {fileID: 2007215662}
   - component: {fileID: 2007215661}
   - component: {fileID: 2007215660}
   - component: {fileID: 2007215659}
@@ -5293,23 +5260,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   speed: 0
---- !u!114 &2007215662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007215658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78bfceff8106d440b38ca4947f28bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  m_playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  m_defaultState: 0
-  m_isResistEnable: 1
 --- !u!114 &2007215663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5322,6 +5272,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e12fb9953ee9d4ca3d9cf6fed352bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySukima
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}
@@ -5755,7 +5710,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2138798244}
   - component: {fileID: 2138798243}
-  - component: {fileID: 2138798242}
   - component: {fileID: 2138798241}
   - component: {fileID: 2138798240}
   - component: {fileID: 2138798239}
@@ -5818,23 +5772,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
   speed: 5
---- !u!114 &2138798242
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2138798237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78bfceff8106d440b38ca4947f28bb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyBase
-  m_playerLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  m_defaultState: 1
-  m_isResistEnable: 0
 --- !u!114 &2138798243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5847,6 +5784,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63bb4c84ed160c94689cc52bc38b5858, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTeke
+  m_playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  m_defaultState: 0
+  m_isResistEnable: 0
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}

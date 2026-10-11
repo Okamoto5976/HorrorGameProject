@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemySukima : MonoBehaviour
+public class EnemySukima : EnemyBase
 {
     //“G‚ª—ˆ‚é‚Ü‚Å‘Ò‚Â
 
@@ -19,7 +18,6 @@ public class EnemySukima : MonoBehaviour
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -86,7 +84,6 @@ public class EnemySukima : MonoBehaviour
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -97,6 +94,11 @@ public class EnemySukima : MonoBehaviour
         m_actionCalculateList.Add(new ActionCalculate(Action.Idle));
         m_actionCalculateList.Add(new ActionCalculate(Action.Wait));
         m_actionCalculateList.Add(new ActionCalculate(Action.Feint));
+    }
+
+    protected override void Init()
+    {
+        
     }
 
     private void Update()
@@ -119,8 +121,8 @@ public class EnemySukima : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable
+        if(m_state == EnemyState.Attack ||
+            m_state == EnemyState.Disable
             )
         {
             return;
@@ -268,13 +270,13 @@ public class EnemySukima : MonoBehaviour
 
     private void ExecuteIdle()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Stay);
+        ChangeState(EnemyState.Stay);
     }
 
     private IEnumerator ExecuteWait()
     {
 
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        ChangeState(EnemyState.Idle);
 
         //anim.idle
         float startTime = Time.time;
@@ -310,7 +312,7 @@ public class EnemySukima : MonoBehaviour
 
     private IEnumerator ExecuteFeint()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        ChangeState(EnemyState.Idle);
 
         //anim.idle
         float startTime = Time.time;

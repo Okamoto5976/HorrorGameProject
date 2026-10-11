@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [RequireComponent (typeof(ReturnPool))]
-public class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour
 {
     //ƒqƒbƒgˆ—
     //Player‚ð”FŽ¯
@@ -36,9 +36,6 @@ public class EnemyBase : MonoBehaviour
 
     //private bool m_isHitCollider = true;
 
-    public UnityEvent OnInit;
-
-
 
     private void Awake()
     {
@@ -50,12 +47,7 @@ public class EnemyBase : MonoBehaviour
         ChangeState(m_defaultState);
     }
 
-    public void Init()
-    {
-        // ‹¤’Ê‚Ì‰Šú‰»ˆ—
-
-        OnInit?.Invoke();
-    }
+    protected abstract void Init();
 
     //public void SetIsHitCollider(bool value) => m_isHitCollider = value;
 
@@ -72,7 +64,7 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("DefaultState");
     }
 
-    public void ChangeState(EnemyState state)
+    protected void ChangeState(EnemyState state)
     {
         if (m_state == state) return;
 

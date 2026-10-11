@@ -1,14 +1,12 @@
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemyMimic : MonoBehaviour, IInteractable
+public class EnemyMimic : EnemyBase, IInteractable
 {
     //================================
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -47,12 +45,16 @@ public class EnemyMimic : MonoBehaviour, IInteractable
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     private void Start()
+    {
+        
+    }
+
+    protected override void Init()
     {
         
     }
@@ -73,7 +75,7 @@ public class EnemyMimic : MonoBehaviour, IInteractable
     public void OnInteract(PlayerController player)
     {
         Debug.Log("Mimic");
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+        ChangeState(EnemyState.Idle);
     }
 
 }

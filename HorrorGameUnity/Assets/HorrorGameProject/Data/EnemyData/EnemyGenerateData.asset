@@ -12,4 +12,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6e945cd14aae7b47b6808084df97f50, type: 3}
   m_Name: EnemyGenerateData
   m_EditorClassIdentifier: Assembly-CSharp::EnemyGenerateData
-  m_enemyGenerateList: []
+  m_enemyGenerateList:
+  - collectNum: 1
+    list:
+    - enemyType: 0
+      num: 2
+  - collectNum: 2
+    list:
+    - enemyType: 0
+      num: 1
+    - enemyType: 1
+      num: 1
+    - enemyType: 2
+      num: 1
+    - enemyType: 4
+      num: 1
+    - enemyType: 6
+      num: 1
+  - collectNum: 3
+    list:
+    - enemyType: 0
+      num: 1
+    - enemyType: 2
+      num: 1
+    - enemyType: 4
+      num: 1
+    - enemyType: 5
+      num: 1
+    - enemyType: 6
+      num: 1
+    - enemyType: 7
+      num: 1
+  - collectNum: 4
+    list:
+    - enemyType: 0
+      num: 1
+    - enemyType: 1
+      num: 1
+    - enemyType: 2
+      num: 1
+    - enemyType: 5
+      num: 1

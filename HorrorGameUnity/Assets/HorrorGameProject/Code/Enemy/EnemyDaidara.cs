@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemyDaidara : MonoBehaviour
+public class EnemyDaidara : EnemyBase
 {
     //“G‚ª—ˆ‚é‚Ü‚Å‘Ò‚Â
 
@@ -20,7 +18,6 @@ public class EnemyDaidara : MonoBehaviour
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -99,7 +96,6 @@ public class EnemyDaidara : MonoBehaviour
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -110,6 +106,11 @@ public class EnemyDaidara : MonoBehaviour
         m_actionCalculateList.Add(new ActionCalculate(Action.Idle));
         m_actionCalculateList.Add(new ActionCalculate(Action.Wait));
         m_actionCalculateList.Add(new ActionCalculate(Action.Attack));
+    }
+
+    protected override void Init()
+    {
+        
     }
 
     private void Update()
@@ -152,8 +153,8 @@ public class EnemyDaidara : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable
+        if(m_state == EnemyState.Attack ||
+            m_state == EnemyState.Disable
             )
         {
             return;

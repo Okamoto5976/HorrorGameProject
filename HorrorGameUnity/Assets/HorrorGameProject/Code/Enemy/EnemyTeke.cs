@@ -2,15 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(EnemyBase))]
 [RequireComponent (typeof(Movement))]
-public class EnemyTeke : MonoBehaviour
+public class EnemyTeke : EnemyBase
 {
     //================================
     // Component References
     //================================
 
-    private EnemyBase m_enemyBase;
     private Movement m_movement;
     private SpriteRenderer m_renderer;
 
@@ -77,7 +75,6 @@ public class EnemyTeke : MonoBehaviour
 
     private void Awake()
     {
-        m_enemyBase = GetComponent<EnemyBase>();
         m_movement = GetComponent<Movement>();
         m_renderer = GetComponentInChildren<SpriteRenderer>();
     }
@@ -86,11 +83,16 @@ public class EnemyTeke : MonoBehaviour
     {
     }
 
+    protected override void Init()
+    {
+        
+    }
+
     private void Update()
     {
         if (m_debugMode.Value)
         {
-            m_debugText.text = $"EnemyState : {m_enemyBase.State}";
+            m_debugText.text = $"EnemyState : {m_state}";
         }
 
         if (!m_isEnable) return;
@@ -126,7 +128,7 @@ public class EnemyTeke : MonoBehaviour
 
 
             m_toPlayer = m_playerPos.Value - transform.position;
-            m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
+            ChangeState(EnemyState.Idle);
         }
 
 
@@ -134,8 +136,8 @@ public class EnemyTeke : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
-            m_enemyBase.State == EnemyBase.EnemyState.Disable
+        if(m_state == EnemyState.Attack ||
+            m_state == EnemyState.Disable
             )
         {
             return;
