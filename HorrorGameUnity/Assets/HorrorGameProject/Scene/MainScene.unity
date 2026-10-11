@@ -2577,7 +2577,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &866994704
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2629,7 +2629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f431457a844dfb429711473c47a039e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
-  speed: 5
+  speed: 3
 --- !u!114 &866994707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2662,11 +2662,9 @@ MonoBehaviour:
   m_playerPos: {fileID: 11400000, guid: aa8ffbc2c71a4f54bbf7f955ddd981b1, type: 2}
   m_playerFacingDir: {fileID: 11400000, guid: 73731e4efef66aa4c8c40c687a036cb5, type: 2}
   m_playerStamina: {fileID: 11400000, guid: d1613cd4259d3734fa37071ec9d4235e, type: 2}
-  m_checkDiscoveryDistance: 0
-  m_checkAttackDistance: 0
-  m_activeTimer: 3
+  m_activeTimer: 2
   m_activeRange: 3
-  m_canAttackTimeValue: 3
+  m_canAttackTimeValue: 2
   m_debugMode: {fileID: 11400000, guid: 1c06c99d5201b8a438ca8892e5099f33, type: 2}
   m_debugText: {fileID: 542157577}
 --- !u!4 &866994709
@@ -4286,7 +4284,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 120
   m_CollisionDetection: 0
 --- !u!114 &1529589302
 MonoBehaviour:
@@ -4300,7 +4298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f431457a844dfb429711473c47a039e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Movement
-  speed: 10
+  speed: 3
 --- !u!114 &1529589303
 MonoBehaviour:
   m_ObjectHideFlags: 0

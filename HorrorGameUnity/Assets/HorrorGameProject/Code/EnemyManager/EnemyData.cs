@@ -15,5 +15,8 @@ public class EnemyData : ScriptableObject
     public Enum_Enemy Enemy => m_enemy;
     public List<Enum_Stage> CanStageList => m_canStageList;
     public int MaxExistence => m_maxExistence;
+
+    //ˆÚ“®‚·‚é•p“x
     public float FrequencyTime => m_frequencyTime;
+
 }

@@ -4,10 +4,10 @@ public enum Enum_Enemy
 {
     Ghost,
     Teketeke,
-    Gap,
+    Sukima,
     Map,
-    Big,
+    Daidara,
     Mimic,
     Petapeta,
-    Onbu,
+    Oburi,
 }

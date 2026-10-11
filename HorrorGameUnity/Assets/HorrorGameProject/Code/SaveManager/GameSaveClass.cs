@@ -5,23 +5,43 @@ using System.IO;
 [System.Serializable]
 public class GameSaveData
 {
-    public int collect;
-    public float time;
-
-    public Enum_Stage stage;
-
-    //player data
-    public Vector3 pos;
+    //ロードで　自動的にステージListができる
+    //EnemyPleceDataをロード
+    //その後info
 
     //EventがActiveかIsEvent（発動済み）か
+
+
+
 
     //敵の動き
     //List <enemy , position>　Listに今いる敵を出し、どこのステージにいるか
     //敵の生成は時間ごと　後半に出てくるものがいる
 
+
+
+
+
     public List<PlacementManager.GetObjGameData> getObjGameDatas;
 
     //Event Data
+
+
+
+    //gameProgress-------------------
+    public int collect;
+    public float gameTime;
+
+    public Enum_Stage currentStage;
+
+    //----------------------------
+
+    //player data
+    public Vector3 pos;
+
+
+
+ 
 }
 public class GameSaveClass
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,15 +64,15 @@ public class EnemyPeta : MonoBehaviour
     //Flag
     //==============================
 
-    [SerializeField] private float m_checkDiscoveryDistance;
-    public float CheckDis => m_checkDiscoveryDistance;
+    //[SerializeField] private float m_checkDiscoveryDistance;
+    //public float CheckDis => m_checkDiscoveryDistance;
 
-    [SerializeField] private float m_checkAttackDistance;
-    public float AttackDis => m_checkAttackDistance;
+    //[SerializeField] private float m_checkAttackDistance;
+    //public float AttackDis => m_checkAttackDistance;
 
     private Action m_previousAction = Action.Idle;
 
-    private Coroutine m_isAction;
+    //private Coroutine m_actionCoroutine;
 
     //----------Active flag-----------------------------
     private bool m_isActive;
@@ -96,8 +97,8 @@ public class EnemyPeta : MonoBehaviour
     private Vector3 m_velocity;
 
     //coolTime
-    private float m_coolTimer;
-    private bool IsCoolTime => m_coolTimer > 0f;
+    //private float m_coolTimer;
+    //private bool IsCoolTime => m_coolTimer > 0f;
     
 
     //==============================
@@ -159,13 +160,17 @@ public class EnemyPeta : MonoBehaviour
         }
 
         m_moveTimer += Time.deltaTime;
-       
+
 
         //canattack is ture + Petaの座標より前なとき　こっちを向いたら　攻撃isAttack True
-        if(!m_disable && (m_playerFacingDir.Value.x * m_velocity.x) < 0f)
+        if (!m_disable &&
+        m_canAttack &&
+        (m_playerFacingDir.Value.x * m_velocity.x) < 0f)
         {
             m_isAttack = true;
         }
+
+        if (m_isAttack) return;
 
         //もしPlayerより前に行ったら終了
         //あとはDisableにして　音をPlayerの座標の前にしておく
@@ -194,21 +199,29 @@ public class EnemyPeta : MonoBehaviour
 
         m_timer += Time.deltaTime;
 
-        if (m_timer > m_activeTimer && m_sqrDistance < m_activeRange * m_activeRange)
+        if (m_timer > m_activeTimer && m_sqrDistance > m_activeRange * m_activeRange)
         {
+
             m_isActive = true;
 
             //向きを固定
-            m_velocity = m_toPlayer;
+            Vector3 direction = m_toPlayer;
+
+            direction.y = 0f;
+            direction.z = 0f;
+
+            m_velocity = direction.normalized;
         }
     }
 
     private void FixedUpdate()
     {
-        if(m_enemyBase.State == EnemyBase.EnemyState.Attack ||
+        if(m_disable ||
+            m_enemyBase.State == EnemyBase.EnemyState.Attack ||
             m_enemyBase.State == EnemyBase.EnemyState.Disable
             )
         {
+            m_movement.Move(Vector3.zero);
             return;
         }
 
@@ -250,7 +263,7 @@ public class EnemyPeta : MonoBehaviour
 
         if(m_canAttack)
         {
-            m_evaluateMoveValue = 20f;
+            m_evaluateMoveValue += 20f;
         }
 
         var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Move);
@@ -263,14 +276,18 @@ public class EnemyPeta : MonoBehaviour
         //基礎値
         m_evaluateWaitValue = 10f;
 
-        if(m_globalAlert > 60f)
+        if(m_globalAlert > 80f)
         {
-            //m_evaluateWaitValue = 30f;
+            m_evaluateWaitValue += 10f;
+        }
+        else if (m_globalAlert > 60f)
+        {
+            m_evaluateWaitValue += 20f;
         }
 
-        if(m_moveTimer > 5 && 10 < m_moveTimer)
+        if (m_moveTimer > 3 && 6 < m_moveTimer)
         {
-
+            m_evaluateWaitValue += m_moveTimer * 1.5f;
         }
         //時間を設けて　それが５～１０なら
         // value * timeで　時間ごとに増える値
@@ -286,7 +303,7 @@ public class EnemyPeta : MonoBehaviour
 
         if(m_isAttack)
         {
-            m_evaluateAttackValue = 60f;
+            m_evaluateAttackValue += 60f;
         }
 
         var action = m_actionCalculateList.Find(x => x != null && x.m_action == Action.Attack);
@@ -303,31 +320,30 @@ public class EnemyPeta : MonoBehaviour
 
     private void DecideAction()
     {
-        if (m_isAction != null) return;
+        //if (m_actionCoroutine != null) return;
 
         m_baseValue = 0f;
 
-        List<ActionCalculate> candidates = new();
+        //List<ActionCalculate> candidates = new();
+
+        Action setAction = Action.Idle;
 
         foreach (var action in m_actionCalculateList)
         {
+            
+
             if (action.m_value > m_baseValue)
             {
                 m_baseValue = action.m_value;
-                candidates.Clear();
-                candidates.Add(action);
+
+                setAction = action.m_action;
+
             }
-            else if (action.m_value == m_baseValue)
-            {
-                candidates.Add(action);
-            }
+
         }
 
-        if (candidates.Count > 0)
-        {
-            int index = Random.Range(0, candidates.Count);
-            m_decideAction = candidates[index].m_action;
-        }
+        m_decideAction = setAction;
+
     }
 
     //==============================
@@ -336,7 +352,7 @@ public class EnemyPeta : MonoBehaviour
 
     private void ExecuteAction()
     {
-        if (m_isAction != null) return;
+        //if (m_actionCoroutine != null) return;
 
 
         switch (m_decideAction)
@@ -381,8 +397,9 @@ public class EnemyPeta : MonoBehaviour
 
     private void ExecuteAttack()
     {
-        m_enemyBase.ChangeState(EnemyBase.EnemyState.Attack);
+        m_enemyBase.ChangeState(EnemyBase.EnemyState.Idle);
 
+        m_movement.Move(m_toPlayer.normalized);
     }
 
     private void OnTriggerEnter(Collider other)

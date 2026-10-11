@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent (typeof(ReturnPool))]
 public class EnemyBase : MonoBehaviour
@@ -16,7 +17,7 @@ public class EnemyBase : MonoBehaviour
         Disable
     }
 
-    private EnemyState m_state = EnemyState.Idle;
+    protected EnemyState m_state = EnemyState.Idle;
 
     public EnemyState State => m_state;
 
@@ -35,6 +36,9 @@ public class EnemyBase : MonoBehaviour
 
     //private bool m_isHitCollider = true;
 
+    public UnityEvent OnInit;
+
+
 
     private void Awake()
     {
@@ -44,6 +48,13 @@ public class EnemyBase : MonoBehaviour
     private void OnEnable()
     {
         ChangeState(m_defaultState);
+    }
+
+    public void Init()
+    {
+        // ‹¤’Ê‚Ì‰Šú‰»ˆ—
+
+        OnInit?.Invoke();
     }
 
     //public void SetIsHitCollider(bool value) => m_isHitCollider = value;

@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    [SerializeField] private EnemyManager m_enemyManager;
+
     [SerializeField] private int m_clearCount;
 
 
@@ -70,6 +72,8 @@ public class GameManager : MonoBehaviour
     public void AddCollect()
     {
         m_collectHead++;
+
+        m_enemyManager.GenerateEnemy(m_collectHead);
     }
 
     public void CalculationAlert(float value)
@@ -110,16 +114,16 @@ public class GameManager : MonoBehaviour
 
     public GameSaveData SaveGameData(GameSaveData data)
     {
-        data.time = m_gameTimer;
+        data.gameTime = m_gameTimer;
         data.collect = m_collectHead;
-        data.stage = m_currentStage;
+        data.currentStage = m_currentStage;
 
         return data;
     }
 
     public void SetGameData(GameSaveData data)
     {
-        m_gameTimer = data.time;
+        m_gameTimer = data.gameTime;
         m_collectHead = data.collect;
 
         m_isGameStart = true;

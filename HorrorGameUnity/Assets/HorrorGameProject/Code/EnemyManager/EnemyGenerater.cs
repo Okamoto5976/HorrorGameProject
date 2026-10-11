@@ -10,7 +10,7 @@ public class EnemyGenerater : MonoBehaviour
     private List<ReturnPool> m_enemyList = new();
 
     //call Move Scene
-    public void GenerateEnemy(Enum_Stage stage)
+    public void UpdateEnemy(Enum_Stage stage)
     {
         if (!GameManager.Instance.IsGameStart) return;
 
@@ -42,8 +42,14 @@ public class EnemyGenerater : MonoBehaviour
             var enemyObj = obj.GetComponent<ReturnPool>();
             m_enemyList.Add(enemyObj);
 
+            var enemyBase = obj.GetComponent<EnemyBase>();
+            
+
             obj.transform.position = pos.GetSpawnPos();
         }
 
     }
+
+
+   
 }

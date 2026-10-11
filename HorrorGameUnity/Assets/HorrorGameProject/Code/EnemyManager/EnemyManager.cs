@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+//EnemyList‚ğ•Û‘¶@‚Ü‚½Info‚à
+
 //‚»‚ÌƒXƒe[ƒW‚²‚Æ‚Ì“G‚ÌList
 public class StagePlacementClass
 {
@@ -75,38 +77,41 @@ public class EnemyPlaceClass
     public int Id => m_id;
 }
 
+//“GŒÂ‘Ì‚²‚Æ‚Ìî•ñ
+public class EnemyInfo
+{
+    public EnemyInfo(
+        int id,
+        Enum_Enemy enemy,
+        float frequencyTime
+        )
+    {
+        m_id = id;
+        m_enemy = enemy;
+        m_frequencyTime = frequencyTime;
+
+        m_currentTime = m_frequencyTime;
+    }
+
+    private int m_id;
+    private Enum_Enemy m_enemy;
+    private float m_frequencyTime;
+
+    public float m_currentTime;
+
+    //currentTime‚ª0‚É‚È‚Á‚½‚çID‚©‚ç@“¯‚¶ID‚ªŠ‘®‚·‚éEnemyPlaceData‚ğ@PlacementDataList‚©‚çStage‚²‚Æ‚É’T‚·
+    public int ID => m_id;
+    public Enum_Enemy Enemy => m_enemy;
+
+    public void SetCurrentTime()
+    {
+        m_currentTime = m_frequencyTime;
+    }
+}
+
 public class EnemyManager : MonoBehaviour
 {
-    //“GŒÂ‘Ì‚²‚Æ‚Ìî•ñ
-    public class EnemyInfo
-    {
-        public EnemyInfo(
-            int id,
-            Enum_Enemy enemy,
-            float frequencyTime
-            )
-        {
-            m_id = id;
-            m_enemy = enemy;
-            m_frequencyTime = frequencyTime;
-
-            m_currentTime = m_frequencyTime;
-        }
-
-        private int m_id;
-        private Enum_Enemy m_enemy;
-        private float m_frequencyTime;
-
-        public float m_currentTime;
-
-        public int ID => m_id;
-        public Enum_Enemy Enemy => m_enemy;
-
-        public void SetCurrentTime()
-        {
-            m_currentTime = m_frequencyTime;
-        }
-    }
+    
 
     [SerializeField] private List<EnemyData> m_enemyData = new();
 
@@ -148,24 +153,44 @@ public class EnemyManager : MonoBehaviour
     //    id
     //);
 
+    [SerializeField] private EnemyGenerateData m_enemyGenerateData;
+    //ŠÔ‚Å‚Í‚È‚­@“ª‰ñû‚²‚Æ‚É
+
+    //GameManager‚©‚çŒÄ‚Ô
+    public void GenerateEnemy(int collect)
+    {
+        var list = m_enemyGenerateData.GetEnemyGenerateList(collect);
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            Enum_Enemy type = list[i].enemyType;
+            int num = list[i].num;
+
+            for (int j = 0; j < num; j++)
+            {
+                AddEnemy(type);
+            }
+        }
+    }
+
     private int m_nextID = 1;
 
 
     //call GameStart
-    [ContextMenu("Test Add Enemy")]
-    public void TestAddEnemy()
+    //[ContextMenu("Test Add Enemy")]
+    public void AddEnemy(Enum_Enemy type)
     {
-        var enemy = Enum_Enemy.Ghost;
+        //var enemy = Enum_Enemy.Ghost;
 
         //make info
-        var info = MakeEnemyInfo(enemy, m_nextID);
+        var info = MakeEnemyInfo(type, m_nextID);
         
         m_enemyInfoList.Add(info);
 
         //make EnemyPlaceClass
-        EnemyPlaceClass enemyClass = new(enemy, m_nextID);
+        EnemyPlaceClass enemyClass = new(type, m_nextID);
 
-        AddEnemy(enemyClass);
+        AddEnemyPlace(enemyClass);
 
         m_nextID++;
     }
@@ -205,7 +230,7 @@ public class EnemyManager : MonoBehaviour
     /// <summary>
     /// V‚µ‚­“G‚ğ”z’u‚·‚éˆ—
     /// </summary>
-    public void AddEnemy(EnemyPlaceClass enemyClass)
+    public void AddEnemyPlace(EnemyPlaceClass enemyClass)
     {
         List<Enum_Stage> canStageList = GetEnemyPlacementStageData(enemyClass.Enemy);
 
@@ -220,8 +245,9 @@ public class EnemyManager : MonoBehaviour
 
         Enum_Stage stage = canStageList[num];
 
-        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
         //-----------------------------------------------
+
+        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
 
         //add Enemy in stage to select
         stagePlacement.AddEnemy(enemyClass);
@@ -246,16 +272,14 @@ public class EnemyManager : MonoBehaviour
 
         Enum_Stage stage = canStageList[num];
 
-        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
         //-------------------------------------
-
-
 
         EnemyPlaceClass enemyClass = null;
 
         //“¯‚¶Id‚Ì“G‚ğ’T‚·
         for(int i = 0; i < m_stagePlacementList.Count; i++)
         {
+            //‚±‚±‚Åˆê’v‚µ‚½ID‚ª‚ ‚ê‚Î@EnemyPlaceData‚ğíœ
             enemyClass = m_stagePlacementList[i].GetEnemyByID(info.ID);
 
             if(enemyClass != null)
@@ -271,6 +295,8 @@ public class EnemyManager : MonoBehaviour
             Debug.LogWarning("Not find enemy by id");
             return;
         }
+
+        StagePlacementClass stagePlacement = m_stagePlacementList.Find(x => x != null && x.Stage == stage);
 
         stagePlacement.AddEnemy(enemyClass);
         Debug.Log($"{enemyClass.Id}:{enemyClass.Enemy} -> move {stage}");

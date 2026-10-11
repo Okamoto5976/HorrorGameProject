@@ -55,7 +55,7 @@ public class MainManager : MonoBehaviour
     {
         GameManager.Instance.SetCurrentStage(nextStage);
 
-        m_enemyGenerater.GenerateEnemy(nextStage);
+        m_enemyGenerater.UpdateEnemy(nextStage);
 
         PlacementManager.Instance.SetObjectStage(nextStage);
 
@@ -65,11 +65,11 @@ public class MainManager : MonoBehaviour
     //call load
     public IEnumerator LoadSaveDataCoroutine(GameSaveData data)
     {
-        var name = StageManager.Instance.GetSceneName(data.stage);
+        var name = StageManager.Instance.GetSceneName(data.currentStage);
 
         yield return SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
 
-        InitStage(data.stage);
+        InitStage(data.currentStage);
 
         m_player.transform.position = data.pos;
     }
